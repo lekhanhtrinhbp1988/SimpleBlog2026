@@ -41,6 +41,8 @@ These `ef` commands will fail until a DbContext exists and is registered in `Pro
 - The main branch is `main`, hosted at `github.com/lekhanhtrinhbp1988/SimpleBlog2026`. Changes reach `main` only through pull requests; feature branches are named `feature/<feature>` in English kebab-case.
 - `.github/workflows/ci.yml` runs `dotnet build` and `dotnet test` on Ubuntu for every push to `main` and every pull request into it. It does not provide SQL Server LocalDB, so tests that need a database will need a different setup there.
 - `.claude/settings.json` denies `git push` to agents; the user pushes.
+- `main` is protected: PR required, CI `build-and-test` must pass, and the branch must be up to date with `main`. Force push and deletion are blocked, admins included.
+- Pull requests merge by squash only, and the squash commit takes the PR title and description, so PR titles follow Conventional Commits (`feat(...)`, `fix(...)`, `docs(...)`, `chore(...)`, `ci: ...`). Head branches are deleted after merge; do not keep working on a squashed branch.
 
 ## Structure
 
