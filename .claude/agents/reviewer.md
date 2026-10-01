@@ -58,7 +58,7 @@ git status --porcelain --ignored -- src tests docs
 ## Cách review
 
 1. Đối chiếu thiết kế: thay đổi có đúng theo 02 không; có thêm project, package hay pattern ngoài thiết kế không.
-2. Đối chiếu phạm vi: file bị thay đổi có nằm trong `Files:` của các task trong 03 không; task đã tick có thật sự được làm không. File thay đổi nằm ngoài `Files:` là finding `MAJOR`, trừ artifact trong `docs/features/<feature>/` và acceptance test của tester trong `tests/SimpleBlog.Tests/Acceptance/`.
+2. Đối chiếu phạm vi: file bị thay đổi có nằm trong `Files:` của các task trong 03 không; task đã tick có thật sự được làm không. File thay đổi nằm ngoài `Files:` là finding `MAJOR`, trừ `04-review.md`, `05-test-report.md`, các dấu tick `[x]` trong `03-tasks.md`, và acceptance test của tester trong `tests/SimpleBlog.Tests/Acceptance/`. Nếu `git diff HEAD` cho thấy `01-requirements.md`, `02-design.md` hoặc nội dung task trong `03-tasks.md` bị sửa, đó là finding `BLOCKER`. Khi các file này còn untracked thì không có bản gốc để so; bỏ qua kiểm tra này.
 3. Đối chiếu AC: với từng AC trong 01, code có đáp ứng không. Ghi theo mã AC.
 4. Tìm lỗi đúng sai, lỗi bảo mật (đặc biệt là validate đầu vào, XSS trong view, truy vấn dữ liệu), và unit test thiếu cho logic mới.
 5. Có thể chạy `dotnet build` và `dotnet test` để xác nhận, không bắt buộc.
