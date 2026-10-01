@@ -27,7 +27,7 @@ Feature mới (không có `--from`):
 1. `git status --porcelain` phải rỗng. Không rỗng thì dừng: reviewer cần working tree chỉ chứa thay đổi của feature này.
 2. `git rev-parse --verify --quiet feature/<feature>` không được tìm thấy branch, và `docs/features/<feature>/` chưa tồn tại. Có rồi thì dừng và gợi ý `--from`.
 3. `git check-ignore -q docs/features/<feature>/x`: nếu lệnh trả mã 0 thì tên feature bị `.gitignore` che. Dừng và đề nghị tên khác.
-4. `git switch -c feature/<feature> master`.
+4. `git switch -c feature/<feature> main`.
 
 Chạy tiếp (`--from`):
 
@@ -91,5 +91,5 @@ Commit dùng message nhiều dòng qua heredoc, kèm dòng attribution theo quy 
 1. Bảng các lần gọi agent theo đúng thứ tự: agent và trạng thái.
 2. Số vòng sửa đã dùng.
 3. Số AC đạt trên tổng số, lấy từ bảng trong 05.
-4. Danh sách commit: `git log --oneline master..HEAD`.
-5. Việc của người dùng: đọc lại thay đổi, rồi `git switch master` và `git merge feature/<feature>`.
+4. Danh sách commit: `git log --oneline main..HEAD`.
+5. Việc của người dùng: đọc lại thay đổi, rồi `git push -u origin feature/<feature>` và `gh pr create --base main --fill`. Merge qua pull request trên GitHub sau khi CI xanh; không merge thẳng vào `main` trên máy.
