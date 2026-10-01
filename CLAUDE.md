@@ -36,6 +36,12 @@ These `ef` commands will fail until a DbContext exists and is registered in `Pro
 - The solution file is `SimpleBlog.slnx` (the XML format that SDK 10 creates by default), not a `.sln`.
 - Tests use xUnit v2 (`xunit` 2.9.3) with a global `using Xunit`.
 
+## Git and CI
+
+- The main branch is `main`, hosted at `github.com/lekhanhtrinhbp1988/SimpleBlog2026`. Changes reach `main` only through pull requests; feature branches are named `feature/<feature>` in English kebab-case.
+- `.github/workflows/ci.yml` runs `dotnet build` and `dotnet test` on Ubuntu for every push to `main` and every pull request into it. It does not provide SQL Server LocalDB, so tests that need a database will need a different setup there.
+- `.claude/settings.json` denies `git push` to agents; the user pushes.
+
 ## Structure
 
 - `src/SimpleBlog.Web`: ASP.NET Core MVC app, no authentication. `Program.cs` uses the minimal hosting model with the conventional `{controller=Home}/{action=Index}/{id?}` route and `MapStaticAssets`.
