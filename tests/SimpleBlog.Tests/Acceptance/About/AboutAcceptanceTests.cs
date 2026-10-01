@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace SimpleBlog.Tests.Acceptance.GioiThieu;
+namespace SimpleBlog.Tests.Acceptance.About;
 
 // Program (top-level statements) la internal nen khong dung duoc WebApplicationFactory<Program>
 // truc tiep tu assembly test; tao factory bang reflection tren cung kieu Program do.
@@ -28,14 +28,14 @@ public sealed class WebFactoryHolder : IDisposable
     public void Dispose() { Client.Dispose(); _factory.Dispose(); }
 }
 
-public class GioiThieuAcceptanceTests : IClassFixture<WebFactoryHolder>
+public class AboutAcceptanceTests : IClassFixture<WebFactoryHolder>
 {
     private const string BlogName = "Lê Khánh Trình";
     private const string Description = "Nhiệm vụ của blog là chia sẻ để giúp cho người nào muốn thay đổi, phát triển, không phân biệt tuổi tác.";
     private const string MenuLabel = "Giới thiệu";
     private readonly HttpClient _client;
 
-    public GioiThieuAcceptanceTests(WebFactoryHolder f) => _client = f.Client;
+    public AboutAcceptanceTests(WebFactoryHolder f) => _client = f.Client;
 
     private async Task<string> GetOk(string url)
     {

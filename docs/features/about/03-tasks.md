@@ -1,4 +1,4 @@
-# 03 - Tasks: gioi-thieu
+# 03 - Tasks: about
 
 <!-- Developer chỉ được đổi [ ] thành [x] và chỉ sửa file trong dòng Files: của từng task. -->
 

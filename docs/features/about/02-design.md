@@ -1,4 +1,4 @@
-# 02 - Design: gioi-thieu
+# 02 - Design: about
 
 ## Tóm tắt
 

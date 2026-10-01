@@ -1,15 +1,15 @@
-# 05 - Test report: gioi-thieu
+# 05 - Test report: about
 
 ## Kết quả theo AC
 
 | AC | Test | Kết quả |
 |---|---|---|
-| AC-1 | `GioiThieuAcceptanceTests.AC1_TrangChu_MenuCoMucGioiThieu` | PASS |
-| AC-2 | `GioiThieuAcceptanceTests.AC2_BamMucMenu_MoTrangGioiThieuThanhCong` | PASS |
-| AC-3 | `GioiThieuAcceptanceTests.AC3_TrangGioiThieu_HienThiTenBlog` | PASS |
-| AC-4 | `GioiThieuAcceptanceTests.AC4_TrangGioiThieu_HienThiMoTa` | PASS |
-| AC-5 | `GioiThieuAcceptanceTests.AC5_TrangGioiThieu_MenuCoMucGioiThieu` | PASS |
-| AC-6 | `GioiThieuAcceptanceTests.AC6_MoTrucTiep_KhongCanDangNhap` | PASS |
+| AC-1 | `AboutAcceptanceTests.AC1_TrangChu_MenuCoMucGioiThieu` | PASS |
+| AC-2 | `AboutAcceptanceTests.AC2_BamMucMenu_MoTrangGioiThieuThanhCong` | PASS |
+| AC-3 | `AboutAcceptanceTests.AC3_TrangGioiThieu_HienThiTenBlog` | PASS |
+| AC-4 | `AboutAcceptanceTests.AC4_TrangGioiThieu_HienThiMoTa` | PASS |
+| AC-5 | `AboutAcceptanceTests.AC5_TrangGioiThieu_MenuCoMucGioiThieu` | PASS |
+| AC-6 | `AboutAcceptanceTests.AC6_MoTrucTiep_KhongCanDangNhap` | PASS |
 
 Ghi chú: feature không có DbContext nên bỏ qua database test. `Program` là internal nên test tạo `WebApplicationFactory<Program>` bằng reflection (không sửa `src/`). Test so khớp chuỗi trên HTML thô (UTF-8, NFC), nên cũng xác nhận nội dung không bị encode thành entity.
 

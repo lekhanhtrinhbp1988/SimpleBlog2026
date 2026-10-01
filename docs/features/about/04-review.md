@@ -1,8 +1,8 @@
-# 04 - Review: gioi-thieu
+# 04 - Review: about
 
 ## Phạm vi đã xem
 
-- Đã sửa: `src/SimpleBlog.Web/Controllers/HomeController.cs`, `src/SimpleBlog.Web/Views/Shared/_Layout.cshtml`, `docs/features/gioi-thieu/03-tasks.md` (chỉ đổi dấu tick).
+- Đã sửa: `src/SimpleBlog.Web/Controllers/HomeController.cs`, `src/SimpleBlog.Web/Views/Shared/_Layout.cshtml`, `docs/features/about/03-tasks.md` (chỉ đổi dấu tick).
 - File mới (untracked), đã đọc toàn bộ: `src/SimpleBlog.Web/Views/Home/About.cshtml`, `tests/SimpleBlog.Tests/Unit/HomeControllerTests.cs`.
 - File bị .gitignore che: chỉ có `bin/`, `obj/` (bỏ qua), không có finding.
 - Đã chạy `dotnet test`: 2 test đạt, 0 lỗi.
