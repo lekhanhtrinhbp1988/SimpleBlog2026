@@ -1,0 +1,29 @@
+root = true
+
+# Line endings are handled by .gitattributes, so end_of_line is not set here.
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Razor views keep a UTF-8 BOM so Vietnamese text is read correctly
+# by every editor and tool.
+[*.cshtml]
+charset = utf-8-bom
+
+[*.{json,yml,yaml,csproj,props,targets,slnx,xml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Third-party libraries are vendored as-is
+[src/SimpleBlog.Web/wwwroot/lib/**]
+charset = unset
+indent_style = unset
+indent_size = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset

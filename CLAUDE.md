@@ -35,6 +35,7 @@ These `ef` commands will fail until a DbContext exists and is registered in `Pro
 - Both projects target `net10.0` with nullable reference types and implicit usings enabled.
 - The solution file is `SimpleBlog.slnx` (the XML format that SDK 10 creates by default), not a `.sln`.
 - Tests use xUnit v2 (`xunit` 2.9.3) with a global `using Xunit`.
+- `.gitattributes` stores text files with LF in the repository; Git checks them out with the platform's line ending. `.editorconfig` sets UTF-8 without BOM, except `.cshtml`, which is UTF-8 with BOM so Vietnamese text survives every tool. Run `dotnet format` before committing; CI fails on `dotnet format --verify-no-changes`.
 
 ## Git and CI
 
