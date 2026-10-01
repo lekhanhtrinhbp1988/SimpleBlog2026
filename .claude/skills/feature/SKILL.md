@@ -76,10 +76,14 @@ Sau `DONE`, kiểm file mà bước đó phải để lại. Không đúng thì 
 
    `DONE` thì sang 8.
 8. Commit phần còn lại: `git add -A`, message `feat(<feature>): <tóm tắt một dòng từ 01>`.
+9. Mở pull request:
+   - `git push -u origin feature/<feature>`.
+   - `gh pr create --base main --head feature/<feature>`, tiêu đề đúng bằng dòng đầu message commit của bước 8 (khi squash, tiêu đề PR thành commit trên `main`). Mô tả gồm: tóm tắt từ 01, số AC đạt trên tổng từ 05, đường dẫn tới 01 đến 05, các điểm người đọc cần lưu ý, và dòng attribution PR theo quy định của phiên.
+   - Push hoặc tạo PR bị từ chối thì không thử cách khác. Giữ nguyên commit, báo lỗi và đưa lệnh cho người dùng tự chạy.
 
 Giới hạn: tối đa 3 vòng sửa cho cả feature, tính chung cho reviewer và tester. Cần vòng thứ 4 thì dừng.
 
-Commit dùng message nhiều dòng qua heredoc, kèm dòng attribution theo quy định của phiên. Không `git push`, không merge, không `git reset`, `git stash`, `git checkout -- <file>`, không `--no-verify`.
+Commit dùng message nhiều dòng qua heredoc, kèm dòng attribution theo quy định của phiên. Chỉ push đúng branch `feature/<feature>` ở bước 9. Không push `main`, không `--force`, không merge PR (`gh pr merge`), không `git reset`, `git stash`, `git checkout -- <file>`, không `--no-verify`.
 
 ## Khi dừng giữa chừng
 
@@ -92,4 +96,5 @@ Commit dùng message nhiều dòng qua heredoc, kèm dòng attribution theo quy 
 2. Số vòng sửa đã dùng.
 3. Số AC đạt trên tổng số, lấy từ bảng trong 05.
 4. Danh sách commit: `git log --oneline main..HEAD`.
-5. Việc của người dùng: đọc lại thay đổi, rồi `git push -u origin feature/<feature>` và `gh pr create --base main --fill`. Merge qua pull request trên GitHub sau khi CI xanh; không merge thẳng vào `main` trên máy.
+5. Link PR và trạng thái CI hiện tại (`gh pr checks`).
+6. Việc của người dùng: đọc PR, bấm **Squash and merge** khi CI xanh, rồi gõ `/sync`.
