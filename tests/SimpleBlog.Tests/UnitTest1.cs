@@ -1,4 +1,4 @@
-﻿namespace SimpleBlog.Tests;
+namespace SimpleBlog.Tests;
 
 public class UnitTest1
 {
