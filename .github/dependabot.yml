@@ -21,5 +21,8 @@ updates:
     commit-message:
       prefix: "ci(deps)"
     groups:
-      actions:
+      # Same rule as NuGet: minor and patch together, each major update in its own PR
+      # so its breaking changes can be read and reverted on their own.
+      actions-minor-and-patch:
         patterns: ["*"]
+        update-types: [minor, patch]

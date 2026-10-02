@@ -37,3 +37,9 @@ Mã `BLD-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** trước khi bật warning thành lỗi, build thử với analyzer để đếm lỗi. Kết quả chỉ có một loại: CA1707 cấm gạch dưới trong tên method, đụng với quy ước tên test `AC1_...` dùng để truy vết AC.
 - **Bài học:** luật chung có thể xung đột với quy ước có chủ đích của dự án. Tắt luật cho cả repo thì mất lợi ích; đổi tên test thì mất truy vết.
 - **Áp dụng:** tắt CA1707 chỉ cho `tests/**.cs`, có comment lý do bên cạnh, ghi trong ADR-0006. Mọi ngoại lệ sau này theo cùng cách: phạm vi hẹp nhất, có lý do, ghi ở mục "Cần lưu ý" của PR.
+
+### BLD-08. CI xanh chưa chắc đã chạy test; với bản nâng lớn của công cụ test, kiểm số test đã chạy
+
+- **Chuyện gì xảy ra:** Dependabot mở PR nâng `xunit.runner.visualstudio` từ 3 lên 4, cùng lúc với nâng lớn `Microsoft.NET.Test.Sdk` và `coverlet`. Runner mới có thể không còn nhận test viết bằng xunit v2; khi đó `dotnet test` vẫn có thể báo thành công mà không chạy test nào.
+- **Bài học:** CI chỉ chứng minh lệnh chạy xong, không chứng minh nó kiểm được điều cần kiểm. Với thay đổi đụng tới chính công cụ test, phải nhìn vào kết quả, không chỉ vào dấu xanh.
+- **Áp dụng:** với PR nâng công cụ test, đọc dòng `Passed! ... Total: N` trong log CI và so với số test trước đó (đã làm cho #10, #11, #12: đều 8/8). Dependabot tách mỗi bản nâng lớn thành một PR riêng, cho cả NuGet lẫn GitHub Actions, để đọc release notes và gỡ ra riêng được.
