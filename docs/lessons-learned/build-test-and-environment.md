@@ -43,3 +43,9 @@ Mã `BLD-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** Dependabot mở PR nâng `xunit.runner.visualstudio` từ 3 lên 4, cùng lúc với nâng lớn `Microsoft.NET.Test.Sdk` và `coverlet`. Runner mới có thể không còn nhận test viết bằng xunit v2; khi đó `dotnet test` vẫn có thể báo thành công mà không chạy test nào.
 - **Bài học:** CI chỉ chứng minh lệnh chạy xong, không chứng minh nó kiểm được điều cần kiểm. Với thay đổi đụng tới chính công cụ test, phải nhìn vào kết quả, không chỉ vào dấu xanh.
 - **Áp dụng:** với PR nâng công cụ test, đọc dòng `Passed! ... Total: N` trong log CI và so với số test trước đó (đã làm cho #10, #11, #12: đều 8/8). Dependabot tách mỗi bản nâng lớn thành một PR riêng, cho cả NuGet lẫn GitHub Actions, để đọc release notes và gỡ ra riêng được.
+
+### BLD-09. Thử một cổng chặn theo cả hai chiều: phải chặn được và phải cho qua được
+
+- **Chuyện gì xảy ra:** script `foundation-gate` được thử 5 trường hợp trước khi mở PR #16: hai trường hợp phải qua (PR không đụng feature, push lên `main`), hai phải chặn (thiếu file nền, một file còn `draft`), một phải qua khi đủ điều kiện. Trường hợp file nền dùng line ending CRLF (kiểu Windows) được thử riêng, vì `grep` đơn giản trên `status: approved\r` sẽ không khớp.
+- **Bài học:** cổng chặn chỉ được thử ở trường hợp "qua" thì có thể không bao giờ chặn; chỉ thử "chặn" thì có thể chặn cả việc hợp lệ. Lỗi kiểu đó lộ ra đúng lúc phiền nhất.
+- **Áp dụng:** script kiểm tra mới phải được thử ở cả trường hợp qua và chặn, kể cả khác biệt nền tảng (CRLF, đường dẫn Windows). Thử trong `git worktree` tạm để không làm bẩn nhánh đang làm, rồi xóa đi. Ghi bảng các trường hợp đã thử vào mục "Kiểm tra" của PR.

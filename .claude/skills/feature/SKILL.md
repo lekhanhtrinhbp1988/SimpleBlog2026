@@ -86,7 +86,7 @@ Sau `DONE`, kiểm file mà bước đó phải để lại. Không đúng thì 
 8. Commit phần còn lại: `git add -A`, message `feat(<feature>): <tóm tắt một dòng từ 01>`.
 9. Mở pull request:
    - `git push -u origin feature/<feature>`.
-   - `gh pr create --base main --head feature/<feature>`, tiêu đề đúng bằng dòng đầu message commit của bước 8 (khi squash, tiêu đề PR thành commit trên `main`). Mô tả gồm: tóm tắt từ 01, số AC đạt trên tổng từ 05, đường dẫn tới 01 đến 05, các điểm người đọc cần lưu ý, và dòng attribution PR theo quy định của phiên.
+   - `gh pr create --base main --head feature/<feature>`, tiêu đề đúng bằng dòng đầu message commit của bước 8 (khi squash, tiêu đề PR thành commit trên `main`). Mô tả đi theo đúng các mục của `.github/pull_request_template.md` và giữ **mọi** checkbox Definition of Done, đánh dấu từng cái hoặc ghi vì sao không áp dụng (AGT-15). Nội dung: tóm tắt từ 01, số AC đạt trên tổng từ 05, đường dẫn tới 01 đến 05, các cách lách và điểm người đọc cần lưu ý, và dòng attribution PR theo quy định của phiên. Trước khi tạo PR, kiểm feature này có sinh bài học không; có thì thêm vào `docs/lessons-learned/` và commit trước.
    - Push hoặc tạo PR bị từ chối thì không thử cách khác. Giữ nguyên commit, báo lỗi và đưa lệnh cho người dùng tự chạy.
 
 Giới hạn: tối đa 3 vòng sửa cho cả feature, tính chung cho reviewer và tester. Cần vòng thứ 4 thì dừng.
