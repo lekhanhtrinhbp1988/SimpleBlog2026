@@ -15,7 +15,7 @@ The app is still close to the `dotnet new mvc` skeleton. The only feature is the
 
 Known workaround: `Program` is internal, so the acceptance tests build `WebApplicationFactory` through reflection. Do not copy that pattern; the fix is `public partial class Program {}` in the Web project.
 
-There are no project-level decisions yet (vision, non-functional requirements, UI guidelines, architecture, backlog). When a task needs one of those decisions, ask instead of assuming.
+Project-level decisions (vision, non-functional requirements, UI guidelines, architecture, backlog) belong in `docs/project/` and are produced by `/init-project` (ADR-0007). Until those five files exist with `status: approved`, there are no such decisions: when a task needs one, ask instead of assuming. Never write `status: approved` yourself outside the approval step of `/init-project`.
 
 ## Agent permissions
 
@@ -26,6 +26,7 @@ Changes to `.claude/` (agents, skills, permissions) go through a PR and are appr
 ## Skills
 
 - `/feature <name> <description>` runs BA → Architect → Developer → Reviewer → Tester, stops for the user to approve `01-requirements.md`, then pushes `feature/<name>` and opens a PR.
+- `/init-project [initial request]` drafts the five foundation documents in `docs/project/` with the `product`, `ux` and `architect` (project mode) agents, relays their questions to the user, writes `status: approved` only after the user types `duyệt`, commits each file on `chore/project-foundation`, and opens a PR.
 - `/sync [branch]` runs after the user squash-merges a PR: checks the PR is `MERGED`, switches to `main`, `git pull --ff-only`, deletes the local branch.
 
 ## Database

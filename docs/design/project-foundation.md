@@ -1,6 +1,6 @@
 # Thiết kế: `/init-project` và cổng chặn
 
-Bản thiết kế chi tiết cho [ADR-0007](../adr/0007-project-foundation-gate.md). Trạng thái: **chờ duyệt**. Các điểm cần người quyết nằm ở mục [9. Câu hỏi cần quyết](#9-câu-hỏi-cần-quyết).
+Bản thiết kế chi tiết cho [ADR-0007](../adr/0007-project-foundation-gate.md). Trạng thái: **đã duyệt** ngày 2026-10-02, mọi câu hỏi ở [mục 9](#9-câu-hỏi-cần-quyết) chọn theo đề xuất.
 
 ## 1. Mục tiêu
 
@@ -194,9 +194,9 @@ PR 1 và 2 sửa `.claude/`, nên cần chuyển sang chế độ Default để 
 
 ## 9. Câu hỏi cần quyết
 
-Mỗi câu có đề xuất. Trả lời "theo đề xuất" là đủ, hoặc ghi lựa chọn khác.
+Người quyết định: Lê Khánh Trình, ngày 2026-10-02. **Quyết định: chọn theo đề xuất cho cả 9 câu.**
 
-| # | Câu hỏi | Đề xuất |
+| # | Câu hỏi | Đề xuất (đã chọn) |
 |---|---|---|
 | Q1 | Năm file nền đã đủ chưa? Có thêm `glossary.md` (thuật ngữ Việt và Anh, để đặt tên code thống nhất) không? | Đủ năm file. `glossary.md` để sau, khi có domain rõ hơn |
 | Q2 | Ai ghi `status: approved`? | Skill ghi, **chỉ** sau khi người gõ `duyệt` trong trạm duyệt. Phương án khác: người tự sửa phần đầu file |

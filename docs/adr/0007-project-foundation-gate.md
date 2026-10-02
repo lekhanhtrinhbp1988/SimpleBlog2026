@@ -1,6 +1,6 @@
 # 0007. Giai đoạn khởi động dự án và cổng chặn trước khi làm feature
 
-- Trạng thái: Proposed
+- Trạng thái: Accepted
 - Ngày: 2026-10-02
 - Người quyết định: Lê Khánh Trình
 
