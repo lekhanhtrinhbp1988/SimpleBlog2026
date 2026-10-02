@@ -2,57 +2,42 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Project overview, commands, structure and toolchain are in the README; the rules every contributor follows (branches, commits, PRs, CI, formatting, Definition of Done, when to write an ADR) are in CONTRIBUTING. Both are imported here so they are always in context; do not restate them in this file.
+
+@README.md
+@CONTRIBUTING.md
+
+The rest of this file is only what agents need on top of those two.
+
 ## Current state
 
-This repository is a freshly generated skeleton. The only application code is what `dotnet new mvc` and `dotnet new xunit` produced (`HomeController`, `ErrorViewModel`, an empty `UnitTest1`). There is no DbContext, entity, migration, service layer, or real test yet, so there are no established patterns to follow beyond stock ASP.NET Core MVC.
+The app is still close to the `dotnet new mvc` skeleton. The only feature is the About page (`HomeController.About()`, `Views/Home/About.cshtml`, a "Giới thiệu" menu item), with unit tests in `tests/SimpleBlog.Tests/Unit/` and acceptance tests in `tests/SimpleBlog.Tests/Acceptance/About/`. There is no DbContext, entity, migration or service layer yet, so there are no established patterns beyond stock ASP.NET Core MVC.
 
-## Commands
+Known workaround: `Program` is internal, so the acceptance tests build `WebApplicationFactory` through reflection. Do not copy that pattern; the fix is `public partial class Program {}` in the Web project.
 
-Run from the repository root; `dotnet` picks up `SimpleBlog.slnx` automatically.
+There are no project-level decisions yet (vision, non-functional requirements, UI guidelines, architecture, backlog). When a task needs one of those decisions, ask instead of assuming.
 
-```powershell
-dotnet build
-dotnet test
-dotnet test --filter "FullyQualifiedName~SimpleBlog.Tests.UnitTest1.Test1"   # single test
-dotnet test --filter "FullyQualifiedName~SomeTestClass"                      # single class
-dotnet run --project src/SimpleBlog.Web                                      # http://localhost:5227
-dotnet run --project src/SimpleBlog.Web --launch-profile https               # https://localhost:7276
-```
+## Agent permissions
 
-EF Core CLI is a local tool pinned in `dotnet-tools.json` at the repository root (not in `.config/`). Restore it once, then call it through `dotnet`:
+`.claude/settings.json` allows agents to push only `feature/*` and `chore/*` branches with `git push -u origin <branch>`, and to use `gh pr create`, `gh pr view` and `gh pr checks`. It denies force push, deleting remote branches, pushing `main`, and `gh pr merge`: a human merges. Branch protection on GitHub enforces the same for everyone (ADR-0002, ADR-0004).
 
-```powershell
-dotnet tool restore
-dotnet ef migrations add <Name> --project src/SimpleBlog.Web
-dotnet ef database update --project src/SimpleBlog.Web
-```
+Changes to `.claude/` (agents, skills, permissions) go through a PR and are approved by a human edit by edit. Never work around a permission denial.
 
-These `ef` commands will fail until a DbContext exists and is registered in `Program.cs`.
+## Skills
 
-## Toolchain
-
-- `global.json` pins SDK `10.0.201` with no `rollForward`, so that exact feature band must be installed.
-- Both projects target `net10.0` with nullable reference types and implicit usings enabled.
-- The solution file is `SimpleBlog.slnx` (the XML format that SDK 10 creates by default), not a `.sln`.
-- Tests use xUnit v2 (`xunit` 2.9.3) with a global `using Xunit`.
-- `.gitattributes` stores text files with LF in the repository; Git checks them out with the platform's line ending. `.editorconfig` sets UTF-8 without BOM, except `.cshtml`, which is UTF-8 with BOM so Vietnamese text survives every tool. Run `dotnet format` before committing; CI fails on `dotnet format --verify-no-changes`.
-
-## Git and CI
-
-- The main branch is `main`, hosted at `github.com/lekhanhtrinhbp1988/SimpleBlog2026`. Changes reach `main` only through pull requests; feature branches are named `feature/<feature>` in English kebab-case.
-- `.github/workflows/ci.yml` runs `dotnet build` and `dotnet test` on Ubuntu for every push to `main` and every pull request into it. It does not provide SQL Server LocalDB, so tests that need a database will need a different setup there.
-- `.claude/settings.json` lets agents push only `feature/*` and `chore/*` branches with `git push -u origin <branch>`, and open or inspect PRs with `gh pr create/view/checks`. Force push, branch deletion on the remote, pushing `main`, and `gh pr merge` are denied: merging stays with a human.
-- `/feature` ends by pushing the branch and opening a PR. After the user squash-merges it on GitHub, `/sync` switches to `main`, pulls, and deletes the local branch.
-- `main` is protected: PR required, CI `build-and-test` must pass, and the branch must be up to date with `main`. Force push and deletion are blocked, admins included.
-- Pull requests merge by squash only, and the squash commit takes the PR title and description, so PR titles follow Conventional Commits (`feat(...)`, `fix(...)`, `docs(...)`, `chore(...)`, `ci: ...`). Head branches are deleted after merge; do not keep working on a squashed branch.
-
-## Structure
-
-- `src/SimpleBlog.Web`: ASP.NET Core MVC app, no authentication. `Program.cs` uses the minimal hosting model with the conventional `{controller=Home}/{action=Index}/{id?}` route and `MapStaticAssets`.
-- `tests/SimpleBlog.Tests`: xUnit project that references the Web project and has `Microsoft.AspNetCore.Mvc.Testing`, so integration tests can use `WebApplicationFactory<Program>`.
+- `/feature <name> <description>` runs BA → Architect → Developer → Reviewer → Tester, stops for the user to approve `01-requirements.md`, then pushes `feature/<name>` and opens a PR.
+- `/sync [branch]` runs after the user squash-merges a PR: checks the PR is `MERGED`, switches to `main`, `git pull --ff-only`, deletes the local branch.
 
 ## Database
 
-- The Web project references `Microsoft.EntityFrameworkCore.SqlServer` and `Microsoft.EntityFrameworkCore.Design`, but nothing uses them yet.
-- The connection string `DefaultConnection` exists only in `src/SimpleBlog.Web/appsettings.Development.json` and points at SQL Server LocalDB: `(localdb)\MSSQLLocalDB`, database `SimpleBlog`. `appsettings.json` has no connection string, so any non-Development environment has none.
 - Only run `ef` or SQL commands against `(localdb)\MSSQLLocalDB`.
+- Acceptance tests that need a database use their own database `SimpleBlog_Test`, never `SimpleBlog`.
+
+## Vietnamese text in Razor
+
+Razor HTML-encodes non-ASCII characters printed through `@` (for example `ệ` becomes `&#x1EC7;`). Write fixed Vietnamese strings literally in the `.cshtml` file, not through `@ViewData`, `@Model` or a C# variable, so tests that match raw HTML see the real text. `.cshtml` files are UTF-8 with BOM (ADR-0005).
+
+## Environment
+
+- If `gh` is not found, GitHub CLI is installed at `C:\Program Files\GitHub CLI\gh.exe` but the editor has not been restarted since; tell the user rather than hard-coding the path into scripts.
+- If `dotnet build` fails because `SimpleBlog.Web.exe` is locked, the user is running the app. Use `-c Release`; never kill the user's process.
