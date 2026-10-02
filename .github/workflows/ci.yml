@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Least privilege for GITHUB_TOKEN: every job here only reads the repository.
+# A compromised action or package cannot push, release or change settings.
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest

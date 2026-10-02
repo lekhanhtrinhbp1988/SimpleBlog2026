@@ -22,3 +22,9 @@ Mã `SEC-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 ### SEC-03. Bảo mật nhiều lớp, và phần lớn miễn phí
 
 - **Áp dụng:** với repo public trên GitHub, các lớp sau không tốn tiền: secret scanning, push protection, CodeQL, Dependabot alerts và security updates, private vulnerability reporting. Chúng là lưới an toàn, không thay cho việc tự cẩn thận và review.
+
+### SEC-04. Check trên PR chỉ báo cảnh báo mới; cảnh báo đã có trên `main` phải xem ở tab Security
+
+- **Chuyện gì xảy ra:** khi bật CodeQL ở PR #6, agent kiểm cảnh báo của riêng PR đó (0 cảnh báo) rồi báo "không có vấn đề". Thực ra lần quét đầu tiên trên `main` đã tìm ra `actions/missing-workflow-permissions` ở `ci.yml` (cảnh báo #4), và cảnh báo này nằm im tới PR #16 mới được phát hiện, khi CodeQL comment vào dòng mới thêm.
+- **Bài học:** cảnh báo trên PR chỉ gồm những gì PR đó thêm vào. Khi bật một công cụ quét mới, lần quét đầu trên nhánh chính mới cho thấy toàn bộ hiện trạng.
+- **Áp dụng:** sau khi bật hay đổi cấu hình công cụ quét, xem **Security → Code scanning** (hoặc `gh api repos/<owner>/<repo>/code-scanning/alerts`) cho nhánh `main`, không chỉ check trên PR. Mọi workflow khai báo `permissions` tối thiểu ở đầu file (`contents: read`), chỉ nới cho job thật sự cần ghi.
