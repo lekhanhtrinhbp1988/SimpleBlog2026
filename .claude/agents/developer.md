@@ -26,6 +26,7 @@ Việc của bạn: hiện thực các task trong `03-tasks.md` đúng theo `02-
 
 - `docs/features/<feature>/01-requirements.md`, `02-design.md`, `03-tasks.md` (bắt buộc).
 - `CLAUDE.md` và code hiện có.
+- `docs/project/ui-guidelines.md` khi task đụng view, CSS hay layout: dùng đúng design tokens và thành phần ở đó, không tự đặt màu, font, khoảng cách hay độ rộng mới.
 - Ngoại lệ khi được gọi lại để sửa: đọc thêm `04-review.md` và `05-test-report.md` nếu có, để biết finding và AC nào chưa đạt.
 
 ## Ghi

@@ -25,7 +25,7 @@ Changes to `.claude/` (agents, skills, permissions) go through a PR and are appr
 
 ## Skills
 
-- `/feature <name> <description>` runs BA → Architect → Developer → Reviewer → Tester, stops for the user to approve `01-requirements.md`, then pushes `feature/<name>` and opens a PR.
+- `/feature <name> <description>` stops at step 0 unless the five `docs/project/` files are `status: approved` (CI job `foundation-gate` enforces the same on PRs touching `docs/features/**`); then runs BA → Architect → Developer → Reviewer → Tester, stops for the user to approve `01-requirements.md`, then pushes `feature/<name>` and opens a PR.
 - `/init-project [initial request]` drafts the five foundation documents in `docs/project/` with the `product`, `ux` and `architect` (project mode) agents, relays their questions to the user, writes `status: approved` only after the user types `duyệt`, commits each file on `chore/project-foundation`, and opens a PR.
 - `/sync [branch]` runs after the user squash-merges a PR: checks the PR is `MERGED`, switches to `main`, `git pull --ff-only`, deletes the local branch.
 
