@@ -40,7 +40,7 @@ src/SimpleBlog.Web/        ASP.NET Core MVC, minimal hosting, route mặc địn
 tests/SimpleBlog.Tests/    xUnit v2; Unit/ cho unit test, Acceptance/<Feature>/ cho acceptance test theo AC
 docs/features/<feature>/   01-requirements → 05-test-report của từng feature
 docs/adr/                  Architecture Decision Records: vì sao hệ thống được làm như vậy
-docs/lessons-learned.md    Bài học rút ra khi làm dự án
+docs/lessons-learned/      Bài học rút ra khi làm dự án, mỗi file một chủ đề (mục lục: docs/lessons-learned.md)
 .claude/                   Agent, skill và quyền của Claude Code
 .github/                   CI và mẫu pull request
 ```
