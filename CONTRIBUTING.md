@@ -58,6 +58,18 @@ Khi squash merge, **tiêu đề PR trở thành commit trên `main`**, nên tiê
 
 CI không có SQL Server LocalDB. Test cần database sẽ cần cách khác trên CI (xem [ADR-0003](docs/adr/0003-ci-on-github-actions-ubuntu.md)).
 
+`.github/workflows/codeql.yml` quét lỗ hổng và chất lượng code C# và workflow trên mọi PR, mọi push lên `main`, và hằng tuần. Kết quả xem ở tab **Security → Code scanning**.
+
+Dependabot mở PR cập nhật NuGet và GitHub Actions hằng tuần, tiêu đề `chore(deps): ...` hoặc `ci(deps): ...`. Xử lý như mọi PR: CI xanh thì đọc changelog của bản major trước khi merge.
+
+## Warning là lỗi
+
+`Directory.Build.props` bật .NET analyzer mức Recommended, kiểm code style khi build, và **coi mọi warning là lỗi**, cả trên máy dev lẫn CI (xem [ADR-0006](docs/adr/0006-code-quality-gates.md)).
+
+- Sửa warning, đừng tắt nó.
+- Nếu một luật thật sự không hợp với một trường hợp, tắt bằng `dotnet_diagnostic.<ID>.severity = none` trong `.editorconfig`, cho phạm vi hẹp nhất có thể, kèm một dòng comment giải thích. Ghi việc này ở mục **Cần lưu ý** của PR.
+- Không tắt `TreatWarningsAsErrors`, không dùng `#pragma warning disable` rải rác trong code.
+
 ## Định dạng file
 
 - `.gitattributes`: trong repo luôn lưu LF; Git đổi sang line ending của hệ điều hành khi checkout.
