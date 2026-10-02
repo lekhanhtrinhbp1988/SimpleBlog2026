@@ -20,6 +20,11 @@ indent_size = 2
 [*.md]
 trim_trailing_whitespace = false
 
+# Test names use underscores on purpose: acceptance tests start with the AC id
+# (AC1_...), unit tests follow Method_Scenario. See docs/adr/0006-code-quality-gates.md.
+[tests/**.cs]
+dotnet_diagnostic.CA1707.severity = none
+
 # Third-party libraries are vendored as-is
 [src/SimpleBlog.Web/wwwroot/lib/**]
 charset = unset

@@ -11,6 +11,7 @@ Mỗi file ghi **một** quyết định kỹ thuật quan trọng: bối cảnh
 | [0003](0003-ci-on-github-actions-ubuntu.md) | CI trên GitHub Actions, runner Ubuntu | Accepted |
 | [0004](0004-agent-pipeline-with-human-gates.md) | Pipeline agent theo feature, người giữ điểm duyệt yêu cầu và merge | Accepted |
 | [0005](0005-line-endings-and-encoding.md) | Line ending LF trong repo, UTF-8, `.cshtml` có BOM | Accepted |
+| [0006](0006-code-quality-gates.md) | Cổng chất lượng: analyzer, warning thành lỗi, CodeQL, Dependabot | Accepted |
 
 ## Luật
 

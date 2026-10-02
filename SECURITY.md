@@ -34,3 +34,9 @@ ASP.NET Core tự đọc user secrets (môi trường Development) và biến m�
 ### Lớp bảo vệ trên GitHub
 
 Repo bật **secret scanning** và **push protection**: GitHub chặn push có chứa secret dạng đã biết (key của các nhà cung cấp lớn) và cảnh báo secret đã lọt vào repo. Đây là lưới an toàn, không thay cho việc tự cẩn thận: nó không nhận ra mọi loại secret.
+
+## Lỗ hổng trong code và thư viện
+
+- **CodeQL** quét code C# và GitHub Actions workflow trên mọi PR và hằng tuần. Cảnh báo nằm ở **Security → Code scanning**.
+- **Dependabot alerts** báo khi một thư viện đang dùng có lỗ hổng đã công bố; **Dependabot security updates** tự mở PR nâng lên bản đã vá. Ngoài ra Dependabot mở PR cập nhật thường kỳ hằng tuần.
+- Cảnh báo mức High hoặc Critical được xử lý trước các việc khác.

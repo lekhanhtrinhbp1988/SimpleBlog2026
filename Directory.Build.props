@@ -1,0 +1,16 @@
+<Project>
+
+  <!-- Applies to every project under this folder. See docs/adr/0006-code-quality-gates.md. -->
+  <PropertyGroup>
+    <!-- .NET code analyzers: latest rules, "Recommended" set (more than the default, less than "All"). -->
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Recommended</AnalysisMode>
+
+    <!-- Apply .editorconfig code-style rules during build, not only in the editor. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Any compiler or analyzer warning fails the build. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>
