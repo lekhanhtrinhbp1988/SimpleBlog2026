@@ -82,3 +82,9 @@ Mã `AGT-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 
 - **Chuyện gì xảy ra:** `/sync chore/contributor-docs'` có dư dấu `'`. Agent tự hiểu là gõ nhầm và làm tiếp đúng ý, nhưng đó là đoán.
 - **Áp dụng:** skill kiểm tham số trước khi làm (branch có tồn tại không); sai thì dừng và gợi ý tên gần đúng, thay vì để agent tự đoán.
+
+### AGT-15. Agent tạo PR bằng lệnh thì mẫu PR bị bỏ qua; phải bắt agent dùng mẫu
+
+- **Chuyện gì xảy ra:** mẫu PR có checkbox "có bài học mới thì đã thêm vào lessons learned", và `CLAUDE.md` yêu cầu agent tự thêm bài học. Vậy mà PR #15 và #16 vẫn thiếu bài học, người dùng phải hỏi lần thứ hai. Nguyên nhân: agent tạo PR bằng `gh pr create --body-file` với mô tả tự viết; GitHub chỉ điền mẫu khi tạo PR trên giao diện web, nên checkbox đó không bao giờ xuất hiện để nhắc.
+- **Bài học:** một luật được nhắc ở nhiều chỗ vẫn bị bỏ qua nếu chỗ thật sự dùng (lúc viết mô tả PR) không chứa nó. Phải đặt điểm kiểm ngay tại bước thực hiện.
+- **Áp dụng:** `CLAUDE.md`, bước 9 của `/feature` và bước cuối của `/init-project` yêu cầu mô tả PR đi theo đúng các mục của `.github/pull_request_template.md`, đánh dấu từng checkbox của Definition of Done (hoặc ghi rõ vì sao không áp dụng).

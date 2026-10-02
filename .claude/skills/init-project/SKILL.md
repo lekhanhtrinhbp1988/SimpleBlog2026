@@ -76,7 +76,7 @@ Sau bước `backlog`:
 
 1. Kiểm năm file đều `status: approved`.
 2. `git push -u origin chore/project-foundation`.
-3. `gh pr create --base main --head chore/project-foundation`, tiêu đề `docs(project): project foundation`. Mô tả: tóm tắt từng file, danh sách ADR mới, câu hỏi mở còn lại và hạn chót, feature đầu tiên trong backlog, và dòng attribution PR theo quy định của phiên.
+3. `gh pr create --base main --head chore/project-foundation`, tiêu đề `docs(project): project foundation`. Mô tả đi theo đúng các mục của `.github/pull_request_template.md` và giữ **mọi** checkbox Definition of Done (AGT-15). Nội dung: tóm tắt từng file, danh sách ADR mới, câu hỏi mở còn lại và hạn chót, feature đầu tiên trong backlog, và dòng attribution PR theo quy định của phiên. Trước khi tạo PR, kiểm lần chạy này có sinh bài học không; có thì thêm vào `docs/lessons-learned/` và commit trước.
 4. Push hoặc tạo PR bị từ chối thì không thử cách khác; giữ nguyên commit, báo lỗi và đưa lệnh cho người dùng.
 
 Không push `main`, không `--force`, không `gh pr merge`, không `git reset`, `git stash`, `git checkout -- <file>`, không `--no-verify`.

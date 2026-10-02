@@ -23,3 +23,9 @@ Mã `PRC-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** lessons learned bắt đầu là một file, mã A1–A18 và B1–B17. Sau hai ngày đã 35 mục và người dùng thấy sẽ sớm quá dài. Khi tách theo chủ đề, ADR-0004 đang trích dẫn "A1, A10" bằng đường dẫn cũ, mà ADR đã chốt thì không được sửa.
 - **Bài học:** tài liệu được thêm vào liên tục sẽ phải tách. Nếu mã gắn với vị trí (phần A, phần B) thì tách là phải đổi mã, làm gãy các trích dẫn.
 - **Áp dụng:** giữ `docs/lessons-learned.md` làm mục lục ở đường dẫn cũ, kèm bảng đổi mã cũ sang mới; mã mới theo chủ đề (`AGT-NN`, `SEC-NN`...), không bao giờ đổi, và giữ nguyên khi mục chuyển sang file khác. Áp dụng cùng cách cho mọi tài liệu sống sau này: đặt mã ổn định, có mục lục, có luật tách file.
+
+### PRC-05. Thiết kế lớn: đưa ADR `Proposed` và bản thiết kế có sẵn đề xuất cho từng câu hỏi
+
+- **Chuyện gì xảy ra:** thiết kế `/init-project` ban đầu chỉ nằm trong chat; người dùng phải hỏi lại "ghi lại cho tao để tao duyệt". Khi ghi thành ADR-0007 (`Proposed`) và `docs/design/project-foundation.md`, với 9 câu hỏi mỗi câu kèm đề xuất, người dùng duyệt bằng một câu "làm như đề xuất".
+- **Bài học:** người duyệt cần một tài liệu đọc được, nằm ở chỗ chung và comment được, với các điểm cần quyết đã được tách riêng và có sẵn lựa chọn mặc định. Thiết kế chỉ nằm trong chat thì khó duyệt và mất khi phiên kết thúc.
+- **Áp dụng:** thay đổi lớn về quy trình hay kiến trúc: mở PR gồm ADR `Proposed` và bản thiết kế; mục "Câu hỏi cần quyết" có đề xuất cho từng câu; khi người chốt, ghi quyết định và ngày vào bản thiết kế, đổi ADR sang `Accepted`, rồi triển khai trong cùng PR hoặc PR tiếp theo.

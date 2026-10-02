@@ -38,6 +38,10 @@ Changes to `.claude/` (agents, skills, permissions) go through a PR and are appr
 
 Razor HTML-encodes non-ASCII characters printed through `@` (for example `ệ` becomes `&#x1EC7;`). Write fixed Vietnamese strings literally in the `.cshtml` file, not through `@ViewData`, `@Model` or a C# variable, so tests that match raw HTML see the real text. `.cshtml` files are UTF-8 with BOM (ADR-0005).
 
+## Pull request descriptions
+
+GitHub fills `.github/pull_request_template.md` only for PRs created in the web UI; `gh pr create --body-file` skips it. So whenever you write a PR description, use every section of that template in order (Tóm tắt, Vì sao, Phương án đã cân nhắc, Kiểm tra, Cần lưu ý, Definition of Done) and copy **all** Definition of Done checkboxes, marking each one or writing why it does not apply. Never drop a checkbox (AGT-15).
+
 ## Lessons learned
 
 Before finishing any task that ends in a PR, check whether it produced a lesson (an unexpected failure, a workaround, a recommendation the user had to correct, a missing process step). If so, append an entry to the matching topic file in `docs/lessons-learned/` in the same PR, following the rules in `docs/lessons-learned.md` (next number for that topic's code, never renumber). Do not wait to be asked.
