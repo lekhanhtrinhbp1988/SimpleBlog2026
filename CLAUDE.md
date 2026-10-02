@@ -39,7 +39,7 @@ Razor HTML-encodes non-ASCII characters printed through `@` (for example `ệ` b
 
 ## Lessons learned
 
-Before finishing any task that ends in a PR, check whether it produced a lesson (an unexpected failure, a workaround, a recommendation the user had to correct, a missing process step). If so, append an entry to `docs/lessons-learned.md` in the same PR, in the format the file uses. Do not wait to be asked.
+Before finishing any task that ends in a PR, check whether it produced a lesson (an unexpected failure, a workaround, a recommendation the user had to correct, a missing process step). If so, append an entry to the matching topic file in `docs/lessons-learned/` in the same PR, following the rules in `docs/lessons-learned.md` (next number for that topic's code, never renumber). Do not wait to be asked.
 
 ## Environment
 
