@@ -77,6 +77,14 @@ Dependabot mở PR cập nhật NuGet và GitHub Actions hằng tuần, tiêu đ
 - Chạy `dotnet format` trước khi commit. CI sẽ đỏ nếu còn lệch định dạng.
 - Xem [ADR-0005](docs/adr/0005-line-endings-and-encoding.md).
 
+## Khởi động dự án: `/init-project`
+
+Trước feature nội dung đầu tiên, dự án phải có năm tài liệu nền đã được duyệt trong `docs/project/`: `vision.md`, `nfr.md`, `ui-guidelines.md`, `architecture.md`, `backlog.md` (xem [ADR-0007](docs/adr/0007-project-foundation-gate.md)).
+
+Chạy skill `/init-project [yêu cầu ban đầu]`. Agent `product`, `ux`, `architect` soạn lần lượt từng file và hỏi lại khi thiếu thông tin. Sau mỗi file, **người đọc và gõ `duyệt`**; chỉ khi đó file mới được ghi `status: approved`. Agent không bao giờ tự duyệt. Cuối cùng skill mở PR `docs(project): project foundation`.
+
+Sửa một tài liệu nền đã duyệt: qua PR như mọi thay đổi, cập nhật `approved_on`. Đổi quyết định kiến trúc: viết ADR mới thay thế.
+
 ## Feature: quy trình `/feature`
 
 Feature mới chạy bằng skill `/feature <tên> <mô tả>` của Claude Code:

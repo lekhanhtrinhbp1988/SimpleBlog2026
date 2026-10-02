@@ -38,6 +38,8 @@ Các lệnh `ef` sẽ lỗi cho tới khi có DbContext được đăng ký tron
 ```
 src/SimpleBlog.Web/        ASP.NET Core MVC, minimal hosting, route mặc định {controller=Home}/{action=Index}/{id?}
 tests/SimpleBlog.Tests/    xUnit v2; Unit/ cho unit test, Acceptance/<Feature>/ cho acceptance test theo AC
+docs/project/              Tài liệu nền đã duyệt: vision, nfr, ui-guidelines, architecture, backlog (khung trong _template/)
+docs/design/               Thiết kế chi tiết của các thay đổi lớn về quy trình hoặc hệ thống
 docs/features/<feature>/   01-requirements → 05-test-report của từng feature
 docs/adr/                  Architecture Decision Records: vì sao hệ thống được làm như vậy
 docs/lessons-learned/      Bài học rút ra khi làm dự án, mỗi file một chủ đề (mục lục: docs/lessons-learned.md)
