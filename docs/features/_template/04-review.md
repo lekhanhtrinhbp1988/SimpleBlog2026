@@ -13,6 +13,14 @@
 | AC-1 | | |
 | AC-2 | | |
 
+## Tuân thủ tài liệu nền
+
+| Tài liệu | Đạt | Ghi chú |
+|---|---|---|
+| `ui-guidelines.md` (tokens, layout, thành phần) | | |
+| `nfr.md` (tiếp cận, hiệu năng, SEO, bảo mật) | | |
+| `architecture.md` và ADR | | |
+
 ## Findings
 
 | Mã | Mức độ | Vị trí | Mô tả | Hướng sửa |

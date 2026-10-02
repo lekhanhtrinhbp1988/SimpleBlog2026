@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Least privilege for GITHUB_TOKEN: every job here only reads the repository.
+# A compromised action or package cannot push, release or change settings.
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -24,3 +29,17 @@ jobs:
       - run: dotnet build --no-restore --configuration Release
 
       - run: dotnet test --no-build --configuration Release
+
+  # ADR-0007: feature documents need the approved project foundation.
+  foundation-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check project foundation
+        env:
+          # Empty on push to main, so the gate passes there.
+          BASE_REF: ${{ github.base_ref && format('origin/{0}', github.base_ref) || '' }}
+        run: bash scripts/check-foundation.sh

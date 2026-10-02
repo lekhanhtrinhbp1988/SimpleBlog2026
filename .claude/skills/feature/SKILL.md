@@ -20,6 +20,14 @@ Tham số: `$ARGUMENTS`
 - Từ đầu tiên còn lại là tên feature; phần còn lại là mô tả yêu cầu. Mô tả bắt buộc khi chạy feature mới hoặc `--from ba`.
 - Tên feature phải khớp `^[a-z0-9]+(-[a-z0-9]+)*$`: viết thường, không dấu, nối bằng gạch ngang. Sai thì dừng và nói lý do.
 
+## Bước 0: tài liệu nền
+
+Áp dụng cho cả feature mới và `--from` (ADR-0007).
+
+1. Năm file `docs/project/vision.md`, `nfr.md`, `ui-guidelines.md`, `architecture.md`, `backlog.md` phải tồn tại, và mỗi file có dòng `status: approved` trong phần đầu (giữa hai dòng `---` đầu tiên).
+2. Thiếu file nào hoặc file nào chưa `approved` thì dừng ngay, trước mọi thao tác git. Báo file nào thiếu hoặc còn `draft`, và gợi ý `/init-project` (hoặc `/init-project --from <bước>` nếu đã có một phần).
+3. Không có ngoại lệ, kể cả khi người dùng nói feature nhỏ hay gấp. Người muốn bỏ qua phải sửa skill này qua PR.
+
 ## Chuẩn bị
 
 Feature mới (không có `--from`):

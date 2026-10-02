@@ -56,6 +56,8 @@ Khi squash merge, **tiêu đề PR trở thành commit trên `main`**, nên tiê
 2. `dotnet build -c Release`
 3. `dotnet test -c Release`
 
+Cùng workflow có job `foundation-gate` (`scripts/check-foundation.sh`): PR nào thêm hoặc sửa `docs/features/**` (trừ `_template/`) sẽ đỏ nếu năm tài liệu nền trong `docs/project/` chưa cùng `status: approved` (xem [ADR-0007](docs/adr/0007-project-foundation-gate.md)). PR `chore`, `fix`, tài liệu khác không bị ảnh hưởng.
+
 CI không có SQL Server LocalDB. Test cần database sẽ cần cách khác trên CI (xem [ADR-0003](docs/adr/0003-ci-on-github-actions-ubuntu.md)).
 
 `.github/workflows/codeql.yml` quét lỗ hổng và chất lượng code C# và workflow trên mọi PR, mọi push lên `main`, và hằng tuần. Kết quả xem ở tab **Security → Code scanning**.
@@ -84,6 +86,8 @@ Trước feature nội dung đầu tiên, dự án phải có năm tài liệu n
 Chạy skill `/init-project [yêu cầu ban đầu]`. Agent `product`, `ux`, `architect` soạn lần lượt từng file và hỏi lại khi thiếu thông tin. Sau mỗi file, **người đọc và gõ `duyệt`**; chỉ khi đó file mới được ghi `status: approved`. Agent không bao giờ tự duyệt. Cuối cùng skill mở PR `docs(project): project foundation`.
 
 Sửa một tài liệu nền đã duyệt: qua PR như mọi thay đổi, cập nhật `approved_on`. Đổi quyết định kiến trúc: viết ADR mới thay thế.
+
+**Cổng chặn:** chưa đủ năm file `approved` thì `/feature` dừng ngay ở bước 0, và CI `foundation-gate` đỏ với mọi PR đụng `docs/features/**`. Sau đó, `ba` chỉ nhận feature có trong `backlog.md` ở trạng thái `todo` với phụ thuộc đã `done`, và dừng khi cần một quyết định cấp dự án chưa có, thay vì tự giả định. Feature mới phải được thêm vào backlog (qua PR) trước khi chạy `/feature`.
 
 ## Feature: quy trình `/feature`
 

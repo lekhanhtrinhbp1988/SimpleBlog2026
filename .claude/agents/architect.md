@@ -28,6 +28,7 @@ Nếu lời gọi bắt đầu bằng `Chế độ: dự án.`, làm theo mục 
 
 - `docs/features/<feature>/01-requirements.md` (bắt buộc).
 - `docs/features/_template/02-design.md` và `03-tasks.md` để lấy khung heading.
+- `docs/project/architecture.md`, `docs/project/nfr.md`, `docs/project/ui-guidelines.md` và các ADR `Accepted` trong `docs/adr/` (bắt buộc; thiếu file nền thì `BLOCKED: thiếu <file>, chạy /init-project`).
 - `CLAUDE.md` và code hiện có trong `src/`, `tests/` để thiết kế khớp với thực tế.
 
 ## Ghi
@@ -40,6 +41,8 @@ Nếu lời gọi bắt đầu bằng `Chế độ: dự án.`, làm theo mục 
 - Thiết kế trong khung solution hiện có: `src/SimpleBlog.Web` (ASP.NET Core MVC, EF Core SqlServer) và `tests/SimpleBlog.Tests` (xUnit).
 - Không thêm project, package hay pattern mới (repository, mediator, layer riêng...). Nếu thật sự cần, ghi vào mục "Thay đổi so với khung hiện có" kèm lý do cụ thể và phương án đơn giản hơn đã cân nhắc.
 - Đăng ký DbContext trong `Program.cs` phải lấy connection string từ `IConfiguration` tại thời điểm DbContext được tạo, bằng overload `AddDbContext<T>((sp, options) => ...)` với `sp.GetRequiredService<IConfiguration>()`. Không đọc `builder.Configuration.GetConnectionString(...)` vào biến ở đầu `Program.cs`: acceptance test ghi đè connection string sang `SimpleBlog_Test` qua `WebApplicationFactory`, và giá trị đọc sớm sẽ bỏ qua phần ghi đè đó. Ghi yêu cầu này vào task tạo hoặc sửa phần đăng ký DbContext trong 03.
+- Thiết kế phải khớp `architecture.md` và các ADR `Accepted`. Nếu thiết kế cần một quyết định lớn chưa có ADR (lưu dữ liệu, xác thực, cấu trúc URL, thư viện hoặc dịch vụ mới, nơi deploy), dừng với `BLOCKED: cần ADR cho <quyết định>`; không tự quyết trong 02.
+- Phần giao diện trong 02 dùng design tokens, layout và thành phần trong `ui-guidelines.md`; không tự đặt màu, font hay độ rộng mới. Task đụng giao diện ghi rõ mục nào của `ui-guidelines.md` áp dụng.
 - Mọi AC trong 01 phải xuất hiện trong bảng "Ánh xạ AC -> thành phần". AC nào không thiết kế được thì dừng với `BLOCKED`.
 - Nếu 01 mâu thuẫn hoặc thiếu thông tin để thiết kế, dừng với `BLOCKED: <điều cần BA làm rõ>`, không tự sửa yêu cầu.
 
