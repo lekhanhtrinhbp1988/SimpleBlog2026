@@ -37,6 +37,10 @@ Changes to `.claude/` (agents, skills, permissions) go through a PR and are appr
 
 Razor HTML-encodes non-ASCII characters printed through `@` (for example `ệ` becomes `&#x1EC7;`). Write fixed Vietnamese strings literally in the `.cshtml` file, not through `@ViewData`, `@Model` or a C# variable, so tests that match raw HTML see the real text. `.cshtml` files are UTF-8 with BOM (ADR-0005).
 
+## Lessons learned
+
+Before finishing any task that ends in a PR, check whether it produced a lesson (an unexpected failure, a workaround, a recommendation the user had to correct, a missing process step). If so, append an entry to `docs/lessons-learned.md` in the same PR, in the format the file uses. Do not wait to be asked.
+
 ## Environment
 
 - If `gh` is not found, GitHub CLI is installed at `C:\Program Files\GitHub CLI\gh.exe` but the editor has not been restarted since; tell the user rather than hard-coding the path into scripts.

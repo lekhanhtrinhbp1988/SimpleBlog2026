@@ -82,6 +82,34 @@ Phần A nói về việc dựng workflow cho agent. Phần B nói về vòng đ
 - **Chuyện gì xảy ra:** cài GitHub CLI giữa phiên, nhưng terminal của agent không thấy lệnh `gh` cho tới khi mở lại VS Code. App đang chạy khóa file build Debug, agent phải build Release để không tắt app của người dùng.
 - **Áp dụng:** cài công cụ xong thì khởi động lại editor; agent không được tắt tiến trình của người dùng.
 
+### A14. Luật chỉ nằm trong tài liệu thì sẽ bị bỏ qua, kể cả bởi agent
+
+- **Chuyện gì xảy ra:** file này ghi rõ "thêm mục mới sau mỗi lần retro", nhưng qua thêm hai PR có bài học mới (#5, #6), agent không cập nhật. Người dùng phải hỏi mới phát hiện.
+- **Bài học:** đây là A3 lặp lại ở cấp quy trình. Một việc không có ai, hoặc bước nào, bắt buộc phải làm thì sẽ không được làm.
+- **Áp dụng:** Definition of Done và mẫu PR có mục "đã cập nhật lessons learned nếu có bài học mới". Về lâu dài, thêm bước retro vào cuối `/feature` để agent tự đề xuất mục mới.
+
+### A15. `CLAUDE.md` link tới file khác thì agent không tự đọc; phải import
+
+- **Chuyện gì xảy ra:** đề xuất ban đầu là chuyển luật Git sang `CONTRIBUTING.md` và để `CLAUDE.md` "chỉ trỏ tới". Người dùng hỏi lại có vi phạm best practice không, và lúc đó mới thấy: link thường không được nạp vào context, agent sẽ bỏ sót luật.
+- **Áp dụng:** dùng import `@CONTRIBUTING.md`, `@README.md` trong `CLAUDE.md`: một nguồn duy nhất mà agent vẫn luôn thấy. Tài liệu dài và chỉ cần cho một số việc (ADR, vision) thì gắn vào mục đầu vào của agent cần nó, không import cho mọi phiên.
+
+### A16. Đề xuất của agent cần được chất vấn
+
+- **Chuyện gì xảy ra:** ở A15, câu hỏi "có đi ngược best practice không?" của người dùng làm lộ chỗ thiếu trong đề xuất của agent.
+- **Bài học:** agent trình bày đề xuất rất tự tin, kể cả khi chưa xét hết hệ quả. Hỏi "có vi phạm tiêu chuẩn nào không", "nhược điểm là gì", "phương án khác là gì" là cách rẻ để bắt lỗi trước khi làm.
+- **Áp dụng:** với đề xuất thay đổi quy trình hay kiến trúc, yêu cầu agent nêu phương án đã cân nhắc; mẫu PR và mẫu ADR đều có mục này.
+
+### A17. Bật luật chặt thì đo trước, ngoại lệ thì hẹp nhất có thể
+
+- **Chuyện gì xảy ra:** trước khi bật warning thành lỗi, build thử với analyzer để đếm lỗi. Kết quả chỉ có một loại: CA1707 cấm gạch dưới trong tên method, đụng với quy ước tên test `AC1_...` dùng để truy vết AC.
+- **Bài học:** luật chung có thể xung đột với quy ước có chủ đích của dự án. Tắt luật cho cả repo thì mất lợi ích; đổi tên test thì mất truy vết.
+- **Áp dụng:** tắt CA1707 chỉ cho `tests/**.cs`, có comment lý do bên cạnh, ghi trong ADR-0006. Mọi ngoại lệ sau này theo cùng cách: phạm vi hẹp nhất, có lý do, ghi ở mục "Cần lưu ý" của PR.
+
+### A18. Skill nên tự kiểm tham số
+
+- **Chuyện gì xảy ra:** `/sync chore/contributor-docs'` có dư dấu `'`. Agent tự hiểu là gõ nhầm và làm tiếp đúng ý, nhưng đó là đoán.
+- **Áp dụng:** skill kiểm tham số trước khi làm (branch có tồn tại không); sai thì dừng và gợi ý tên gần đúng, thay vì để agent tự đoán.
+
 ---
 
 ## B. Vòng đời phát triển phần mềm (SDLC)
@@ -146,3 +174,27 @@ Phần A nói về việc dựng workflow cho agent. Phần B nói về vòng đ
 ### B12. Nhìn lại sau mỗi chu kỳ
 
 - **Áp dụng:** sau mỗi feature, ghi những gì gặp vấn đề và đề xuất sửa quy trình (retrospective). File này là nơi gom các bài học đó.
+
+### B13. Tài liệu cho người và tài liệu cho agent là hai thứ khác nhau
+
+- **Chuyện gì xảy ra:** repo có `CLAUDE.md` chi tiết cho agent nhưng không có cả `README.md`. Người mới clone về không biết bắt đầu từ đâu.
+- **Áp dụng:** `README.md` (chạy dự án trong 10 phút), `CONTRIBUTING.md` (quy trình), `SECURITY.md` (secret và báo lỗ hổng), mẫu PR. `CLAUDE.md` import hai file đầu và chỉ thêm phần riêng cho agent.
+
+### B14. Ghi ADR lúc quyết định, không phải sau
+
+- **Chuyện gì xảy ra:** ADR-0002 đến 0005 được viết bù cho các quyết định đã làm từ vài ngày trước. Lý do còn nhớ được vì mới xảy ra; sau vài tháng sẽ mất.
+- **Áp dụng:** quyết định kỹ thuật lớn có ADR trong cùng PR với thay đổi đó (đã có trong Definition of Done). ADR đã chốt không sửa; đổi ý thì viết ADR mới thay thế.
+
+### B15. Warning bị bỏ qua sẽ tích lại; bật "warning là lỗi" từ đầu thì rẻ
+
+- **Chuyện gì xảy ra:** bật analyzer và warning thành lỗi khi repo còn nhỏ: chỉ một loại lỗi phải xử lý. Ở dự án đã chạy vài năm, cùng việc này thường ra hàng trăm warning, và nhóm sẽ ngại bật.
+- **Áp dụng:** bật `TreatWarningsAsErrors` và analyzer ngay từ đầu dự án; sửa warning khi nó mới xuất hiện.
+
+### B16. Bảo mật nhiều lớp, và phần lớn miễn phí
+
+- **Áp dụng:** với repo public trên GitHub, các lớp sau không tốn tiền: secret scanning, push protection, CodeQL, Dependabot alerts và security updates, private vulnerability reporting. Chúng là lưới an toàn, không thay cho việc tự cẩn thận và review.
+
+### B17. "Enterprise-ready" là nhiều lớp; xây theo giai đoạn thật của dự án
+
+- **Bài học:** ngoài code và test, enterprise cần thêm: review của người bắt buộc, bảo mật code và thư viện, cổng chất lượng, phát hành (phiên bản, môi trường, rollback), vận hành (log, giám sát, runbook), quản lý truy cập, kiểm toán, và quản trị việc dùng AI (eval cho agent, chính sách dữ liệu gửi model, prompt injection, trách nhiệm với code do AI viết).
+- **Áp dụng:** không xây hết ngay. Làm cái rẻ trước (CodeQL, Dependabot, warning là lỗi), cái cần khi có người thứ hai (người duyệt bắt buộc, `CODEOWNERS`, organization), cái cần khi đưa lên mạng (CD, staging, giám sát), và chỉ làm phần enterprise thật (SSO, SBOM, chứng nhận tuân thủ) khi khách hàng hoặc luật yêu cầu.

@@ -104,6 +104,7 @@ Một PR được coi là xong khi:
 - [ ] Cách lách, nếu có, đã ghi ở mục **Cần lưu ý** của PR.
 - [ ] Quyết định kỹ thuật mới có ADR trong `docs/adr/`.
 - [ ] Tài liệu liên quan (`README.md`, file này, `CLAUDE.md`) đã cập nhật nếu cách làm thay đổi.
+- [ ] Có bài học mới (lỗi bất ngờ, cách lách, đề xuất bị sửa lại, quy trình thiếu) thì đã thêm mục vào [docs/lessons-learned.md](docs/lessons-learned.md).
 
 ## Khi nào viết ADR
 
