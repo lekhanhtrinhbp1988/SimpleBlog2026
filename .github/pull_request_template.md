@@ -28,4 +28,5 @@
 - [ ] Cách lách, nếu có, đã ghi ở mục "Cần lưu ý"
 - [ ] Quyết định kỹ thuật mới có ADR
 - [ ] Tài liệu liên quan đã cập nhật
+- [ ] Thuật ngữ mới đã có trong docs/glossary.md
 - [ ] Có bài học mới thì đã thêm vào docs/lessons-learned/ (mục lục và cách viết: docs/lessons-learned.md)
