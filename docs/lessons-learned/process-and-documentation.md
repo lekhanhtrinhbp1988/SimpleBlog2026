@@ -29,3 +29,9 @@ Mã `PRC-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** thiết kế `/init-project` ban đầu chỉ nằm trong chat; người dùng phải hỏi lại "ghi lại cho tao để tao duyệt". Khi ghi thành ADR-0007 (`Proposed`) và `docs/design/project-foundation.md`, với 9 câu hỏi mỗi câu kèm đề xuất, người dùng duyệt bằng một câu "làm như đề xuất".
 - **Bài học:** người duyệt cần một tài liệu đọc được, nằm ở chỗ chung và comment được, với các điểm cần quyết đã được tách riêng và có sẵn lựa chọn mặc định. Thiết kế chỉ nằm trong chat thì khó duyệt và mất khi phiên kết thúc.
 - **Áp dụng:** thay đổi lớn về quy trình hay kiến trúc: mở PR gồm ADR `Proposed` và bản thiết kế; mục "Câu hỏi cần quyết" có đề xuất cho từng câu; khi người chốt, ghi quyết định và ngày vào bản thiết kế, đổi ADR sang `Accepted`, rồi triển khai trong cùng PR hoặc PR tiếp theo.
+
+### PRC-06. Giải thích thuật ngữ ngay lần đầu dùng, và giữ một bảng thuật ngữ chung
+
+- **Chuyện gì xảy ra:** agent dùng ADR, Dependabot, CodeQL, SemVer suốt nhiều ngày mà không giải thích. Người dùng phải tự tra Google "ADR là gì", và không hiểu vì sao `dependabot[bot]` mở PR #10–#12, rồi #12 tự đóng và #14 xuất hiện.
+- **Bài học:** người làm lâu trong nghề, hay agent, quên rằng thuật ngữ quen với mình là rào cản với người khác. Hiểu sai một từ dẫn tới duyệt sai một quyết định. Người mới vào nhóm sẽ gặp đúng những chỗ khó này.
+- **Áp dụng:** `docs/glossary.md` định nghĩa mọi từ viết tắt và thuật ngữ quy trình, kèm chỗ dùng trong repo. Definition of Done và mẫu PR có mục "thuật ngữ mới đã có trong glossary". `CLAUDE.md` yêu cầu agent nói tên đầy đủ và nghĩa một dòng ngay lần đầu một thuật ngữ xuất hiện trong cuộc trao đổi, kể cả khi nó đã có trong glossary.
