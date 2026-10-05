@@ -13,6 +13,14 @@ Mỗi file ghi **một** quyết định kỹ thuật quan trọng: bối cảnh
 | [0005](0005-line-endings-and-encoding.md) | Line ending LF trong repo, UTF-8, `.cshtml` có BOM | Accepted |
 | [0006](0006-code-quality-gates.md) | Cổng chất lượng: analyzer, warning thành lỗi, CodeQL, Dependabot | Accepted |
 | [0007](0007-project-foundation-gate.md) | Giai đoạn khởi động dự án và cổng chặn trước khi làm feature | Accepted |
+| [0008](0008-post-storage-database.md) | Nơi lưu bài viết và dữ liệu: database nào | Accepted |
+| [0009](0009-hosting.md) | Nơi deploy web app | Accepted |
+| [0010](0010-authentication.md) | Đăng nhập cho tác giả và độc giả | Accepted |
+| [0011](0011-url-structure-and-language.md) | Cấu trúc URL và cách chọn ngôn ngữ | Accepted |
+| [0012](0012-database-on-ci.md) | Database cho test trên CI | Accepted |
+| [0013](0013-css-approach.md) | Cách viết CSS: Bootstrap, Tailwind hay CSS thuần theo design tokens | Accepted |
+| [0014](0014-post-content-format.md) | Định dạng nội dung bài | Accepted |
+| [0015](0015-ui-test-tooling.md) | Công cụ kiểm giao diện, tiếp cận và hiệu năng | Accepted |
 
 ## Luật
 
