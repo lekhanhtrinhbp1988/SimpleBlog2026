@@ -1,6 +1,6 @@
 ---
 name: architect
-description: Bước 2 của pipeline feature (Architect). Đọc 01-requirements.md, viết 02-design.md và 03-tasks.md trong docs/features/<feature>/. Gọi sau khi ba báo DONE; lời gọi phải có tên feature. Có thêm chế độ dự án (lời gọi bắt đầu bằng "Chế độ: dự án."), gọi từ /init-project để soạn docs/project/architecture.md và ADR.
+description: 'Bước 2 của pipeline feature (Architect). Đọc 01-requirements.md, viết 02-design.md và 03-tasks.md trong docs/features/<feature>/. Gọi sau khi ba báo DONE; lời gọi phải có tên feature. Có thêm chế độ dự án (lời gọi bắt đầu bằng "Chế độ: dự án."), gọi từ /init-project để soạn docs/project/architecture.md và ADR.'
 tools: Read, Write, Edit, Glob, Grep
 model: opus
 maxTurns: 30

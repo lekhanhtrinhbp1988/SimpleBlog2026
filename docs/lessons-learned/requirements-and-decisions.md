@@ -23,3 +23,9 @@ Mã `REQ-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 
 - **Chuyện gì xảy ra:** ADR-0002 đến 0005 được viết bù cho các quyết định đã làm từ vài ngày trước. Lý do còn nhớ được vì mới xảy ra; sau vài tháng sẽ mất.
 - **Áp dụng:** quyết định kỹ thuật lớn có ADR trong cùng PR với thay đổi đó (đã có trong Definition of Done). ADR đã chốt không sửa; đổi ý thì viết ADR mới thay thế.
+
+### REQ-05. ADR dựa trên số liệu dịch vụ bên ngoài phải ghi rõ số liệu chưa kiểm và có bước kiểm trước khi dùng
+
+- **Chuyện gì xảy ra:** khi soạn ADR-0008 (database) và ADR-0009 (nơi chạy), agent `architect` không có tool đọc web. Mọi số liệu về gói miễn phí của Azure SQL, Neon, Render (thời gian thức dậy, hạn mức, tên miền riêng) là theo trí nhớ. Chính các số đó dẫn tới quyết định bỏ SQL Server, kéo theo khoảng 15 file phải sửa. Agent đã tự nói rõ điều này, và `architecture.md` có câu hỏi mở "kiểm lại điều khoản gói miễn phí trước lần deploy đầu".
+- **Bài học:** điều khoản gói miễn phí đổi thường xuyên; trí nhớ của model có độ trễ (AGT-16). Một quyết định khó đổi mà dựa trên số liệu chưa kiểm thì người duyệt phải được biết, và phải có một thời điểm kiểm cụ thể.
+- **Áp dụng:** người điều phối nêu cảnh báo này ở trạm duyệt; câu hỏi mở kiểm điều khoản có hạn chót "trước lần deploy đầu". Việc tiếp theo, qua `/design`: cân nhắc cho `architect` tool `WebFetch` ở chế độ dự án, hoặc thêm bước người điều phối kiểm nguồn của từng ADR trước trạm duyệt.

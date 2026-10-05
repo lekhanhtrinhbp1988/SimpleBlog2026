@@ -100,3 +100,21 @@ Mã `AGT-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** AGT-12 đề xuất import `README.md` và `CONTRIBUTING.md` vào `CLAUDE.md` để có một nguồn duy nhất. Khi tra hướng dẫn chính thức lúc làm skill `/design`, thấy khuyến nghị "Keep CLAUDE.md under 200 lines" và "chỉ đưa vào những gì áp dụng rộng". Đo lại: `CLAUDE.md` cộng hai file import là 254 dòng.
 - **Bài học:** một đề xuất hợp lý về một mặt (không chép lại nội dung) có thể đi ngược khuyến nghị ở mặt khác (độ dài context luôn nạp). Chỉ nhìn thấy khi đối chiếu với nguồn chính thức, không phải khi tự suy luận.
 - **Áp dụng:** skill `/design` bắt buộc mục "Đối chiếu hướng dẫn" có nguồn mở trực tiếp. Việc đưa `CLAUDE.md` về dưới 200 dòng là mục 1.8 của `docs/process-roadmap.md`. Mọi thứ thêm vào `CLAUDE.md` từ nay phải ngắn và trỏ sang skill hay tài liệu.
+
+### AGT-18. Frontmatter YAML sai cú pháp làm agent biến mất mà không báo lỗi; phải kiểm tự động
+
+- **Chuyện gì xảy ra:** khi `/init-project` tới bước `architecture`, gọi agent `architect` nhận lỗi "Agent type 'architect' not found", dù `.claude/agents/architect.md` vẫn nằm đúng chỗ. Nguyên nhân: PR #16 thêm vào `description:` (không có nháy) đoạn `"Chế độ: dự án."`. Trong YAML, `: ` bên trong một giá trị không có nháy là lỗi cú pháp, nên Claude Code bỏ qua cả agent mà không báo gì. `/feature` cũng hỏng ở bước 2 từ PR #16, chỉ là chưa ai chạy. Sửa xong vẫn phải nạp lại phiên thì agent mới xuất hiện.
+- **Bài học:** cấu hình agent cũng là code. Lỗi của nó không làm đỏ build, chỉ lộ ra khi đúng agent đó được gọi, có khi nhiều ngày sau. Giá trị YAML có chứa `: ` hay `#` thì phải đặt trong nháy.
+- **Áp dụng:** sửa `architect.md` (bọc description trong nháy đơn) trong PR `docs(project): project foundation`. Việc tiếp theo: thêm vào CI một bước parse frontmatter của `.claude/agents/*.md` và `.claude/skills/*/SKILL.md`, đỏ khi lỗi hoặc thiếu `name`/`description`; đưa vào `docs/process-roadmap.md` qua `/design`.
+
+### AGT-19. Hỏi người dùng bằng form có lựa chọn và tóm tắt bằng lời thường, không bằng danh sách dài
+
+- **Chuyện gì xảy ra:** vòng đầu của `/init-project`, agent `product` trả 7 câu hỏi, mỗi câu 3–4 lựa chọn, dạng văn bản liền. Người dùng nói "file vision.md đọc rất mỏi mắt" và hỏi cách hiện câu hỏi thành ô chọn. Chuyển sang tool `AskUserQuestion` (tối đa 4 câu mỗi form, 2–4 lựa chọn mỗi câu, luôn có ô "Other" để tự gõ) thì người dùng trả lời cả 5 file mà không phải đọc lại. Bảng NFR 4 cột cũng khó đọc ("nhiều khi tao đọc mà không hiểu gì"), cho tới khi được chỉ chỉ cần đọc cột "Mức cần đạt" và hỏi 3 câu cho mỗi dòng. Một lần form có nút Submit mờ: phải trả lời đủ mọi tab thì nút mới sáng.
+- **Bài học:** tài liệu nền phục vụ hai người đọc: agent cần chi tiết kiểm chứng được, người duyệt cần biết mình đang cam kết điều gì. Đưa nguyên văn câu hỏi của agent cho người dùng là chuyển gánh nặng đọc sang người dùng. Câu hỏi có đề xuất mặc định, dạng ô chọn, giúp người duyệt quyết nhanh mà vẫn đúng (PRC-05).
+- **Áp dụng:** trong lần chạy này, người điều phối chuyển câu hỏi của agent thành form và yêu cầu `ux`, `architect`, `product` (backlog) viết mục "Tóm tắt cho người duyệt" ở đầu file. Việc tiếp theo, qua `/design` và PR riêng: ghi hai điều này vào `.claude/skills/init-project/SKILL.md` (trạm duyệt và vòng hỏi đáp dùng `AskUserQuestion`) và vào các agent `product`, `ux`, `architect` (câu hỏi kèm 2–4 lựa chọn có đề xuất; mục tóm tắt bắt buộc).
+
+### AGT-20. Luật ngôn ngữ trả lời chỉ nằm ở prompt hệ thống thì vẫn bị trôi
+
+- **Chuyện gì xảy ra:** cài đặt `language` của Claude Code yêu cầu trả lời bằng tiếng Việt, vậy mà người điều phối `/init-project` trả lời bằng tiếng Anh nhiều lượt liền. Người dùng phải hỏi "tao muốn tiếng Việt thì phải sửa cái gì?" dù luật đã có.
+- **Bài học:** luật nói một lần, nằm xa lượt hiện tại, giữa một context phần lớn bằng tiếng Anh (`CLAUDE.md`, mô tả tool), sẽ yếu dần (cùng gốc với AGT-11). Luật phải đúng ở mọi lượt thì nên được nhắc ngay cạnh tin nhắn mới nhất.
+- **Áp dụng:** đề xuất hook `UserPromptSubmit` chèn câu nhắc "trả lời bằng tiếng Việt" vào mỗi lượt; làm qua `/design` và PR riêng, vì đụng `.claude/`.
