@@ -19,7 +19,7 @@ Acceptance test nằm trong `tests/SimpleBlog.Tests/Acceptance/WalkingSkeleton/`
 | AC-11 | `InteractionBrowserTests.AC11_TabDauTien_LienKetBoQuaNhanFocusVaHienRa` (Chromium, Firefox; xem Giới hạn) | PASS |
 | AC-12 | `InteractionBrowserTests.AC12_LienKetBoQuaAnKhiChuaCoFocus` (3 trình duyệt) | PASS |
 | AC-13 | `InteractionBrowserTests.AC13_EnterTrenLienKetBoQua_FocusVaoMain` (Chromium, Firefox; xem Giới hạn) | PASS |
-| AC-14 | `InteractionBrowserTests.AC14_FocusLuonNhinThay` (Chromium, Firefox; xem Giới hạn) | PASS |
+| AC-14 | `InteractionBrowserTests.AC14_FocusLuonNhinThay` (Chromium, Firefox; xem Giới hạn). Phạm vi mới: chỉ liên kết và nút, đúng 3 phần tử (liên kết bỏ qua, tên blog, mục Giới thiệu); `main` không nằm trong thứ tự Tab | PASS |
 | AC-15 | `LayoutBrowserTests.AC15_VungBamDuLon` (3 x 360, 1280 x 2) | PASS |
 | AC-16 | `InteractionBrowserTests.AC16_Axe_KhongViPham` (Chromium, 360 và 1280, 2 trang, 4 tag WCAG) | PASS |
 | AC-17 | `InteractionBrowserTests.AC17_TatJavaScript_MenuBamDuoc` (3 trình duyệt) | PASS |
@@ -50,12 +50,16 @@ Acceptance test nằm trong `tests/SimpleBlog.Tests/Acceptance/WalkingSkeleton/`
 | AC-42 | `HttpTests.AC42_CspKhongChoScriptInline` (2 trang) | PASS |
 | AC-43 | `InteractionBrowserTests.AC43_KhongViPhamCsp` (3 x 2 trang, không bypass CSP, nghe `securitypolicyviolation` và console) | PASS |
 | AC-44 | `InteractionBrowserTests.AC44_TenBlogHienThiDungDauNhay` (3 x 2 trang) | PASS |
+| AC-45 | `FooterAndMainFocusBrowserTests.AC45_NoiDungNgan_FooterSatDayKhungNhin` (3 trình duyệt x 360x800, 1280x800, trang chủ, lệch <= 1 px) | PASS |
+| AC-46 | `FooterAndMainFocusBrowserTests.AC46_NoiDungDai_FooterNamNgoaiKhungNhin_VaKhongDinh` (3 trình duyệt x 360, 1280; trang Giới thiệu, khung nhìn cao 150 px; kiểm thêm footer cuộn theo trang) | PASS |
+| AC-47 | `FooterAndMainFocusBrowserTests.AC47_FooterKhongChongLenNoiDung` (3 trình duyệt x 360, 1280 x 2 trang x khung nhìn cao 1600 và 200 px) | PASS |
+| AC-48 | `FooterAndMainFocusBrowserTests.AC48_SauLienKetBoQua_MainKhongVeVongFocus_BanPhim` (Chromium, Firefox; xem Giới hạn) và `..._ChuotVaFocusLapTrinh` (3 trình duyệt; kiểm outline, box-shadow, border của `main`, và liên kết vẫn có outline >= 2 px) | PASS |
 
-44/44 AC PASS.
+48/48 AC PASS.
 
 ## Giới hạn của bằng chứng
 
-- **WebKit và phím Tab (AC-11, AC-13, AC-14).** Playwright WebKit trên Windows và macOS không Tab tới liên kết, chỉ tới điều khiển form (giống Safari mặc định). Đã kiểm bằng trang thử chỉ có `<a>`, `<button>`, `<input>`: Tab bỏ qua `<a>`, `Alt+Tab` cũng vậy. Vì vậy trên máy Windows này ba test bàn phím chỉ chạy Chromium và Firefox; WebKit chỉ chạy khi hệ điều hành không phải Windows/macOS (CI Ubuntu). Kết quả WebKit cho ba AC này chưa có bằng chứng cho tới khi CI chạy. Đây là hạn chế của công cụ, không phải lỗi của ứng dụng.
+- **WebKit và phím Tab (AC-11, AC-13, AC-14, AC-48 bản phím).** Playwright WebKit trên Windows và macOS không Tab tới liên kết, chỉ tới điều khiển form (giống Safari mặc định). Đã kiểm bằng trang thử chỉ có `<a>`, `<button>`, `<input>`: Tab bỏ qua `<a>`, `Alt+Tab` cũng vậy. Vì vậy trên máy Windows này các test bàn phím chỉ chạy Chromium và Firefox; WebKit chỉ chạy khi hệ điều hành không phải Windows/macOS (CI Ubuntu). Kết quả WebKit cho ba AC này chưa có bằng chứng cho tới khi CI chạy. Đây là hạn chế của công cụ, không phải lỗi của ứng dụng.
 - **AC-30 và AC-31** chỉ kiểm được bằng cách đọc `.github/workflows/ci.yml` (bước cài ba trình duyệt trước `dotnet test`, không `--filter`, không `continue-on-error`, job `stylelint` chạy `npx stylelint`). Việc CI thực sự đỏ khi test đỏ chỉ chứng minh được khi chạy trên GitHub; PR đầu tiên sẽ xác nhận. Stylelint đã được chạy thật ở AC-28, AC-29.
 - **AC-16** chạy axe-core trên Chromium với `BypassCSP` (axe cần tiêm script, theo 02). AC-43 không bypass.
 - Test trình duyệt cần cài trình duyệt Playwright. Máy này cài bằng `.playwright/node/.../node.exe package/cli.js install chromium firefox webkit` vì không có `pwsh`.
@@ -64,7 +68,7 @@ Acceptance test nằm trong `tests/SimpleBlog.Tests/Acceptance/WalkingSkeleton/`
 
 ## Output dotnet test
 
-Lệnh: `dotnet test` từ gốc repo (cấu hình Debug). `dotnet format --verify-no-changes` sạch. Lần chạy `dotnet test -c Release` cũng `Passed: 300`.
+Lệnh: `dotnet test -c Release` từ gốc repo. `dotnet format --verify-no-changes` sạch. Vòng này dùng `-c Release` vì app đang chạy khóa file Debug (`SimpleBlog.Web.exe`, tiến trình của người dùng, không kill).
 
 ```
   Determining projects to restore...
@@ -74,7 +78,7 @@ Lệnh: `dotnet test` từ gốc repo (cấu hình Debug). `dotnet format --veri
 Test run for D:\Projects\SimpleBlog2026\tests\SimpleBlog.Tests\bin\Debug\net10.0\SimpleBlog.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   300, Skipped:     0, Total:   300, Duration: 1 m 52 s - SimpleBlog.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   346, Skipped:     0, Total:   346, Duration: 1 m 44 s - SimpleBlog.Tests.dll (net10.0)
 ```
 
 ## AC chưa đạt
@@ -83,4 +87,11 @@ Không.
 
 ## Kết luận
 
-44/44 AC đạt, `dotnet test` xanh (300 test). Lưu ý các giới hạn ở trên (WebKit Tab trên Windows, AC-30 và AC-31 xác nhận cuối cùng trên CI).
+48/48 AC đạt, `dotnet test` xanh (346 test). Lưu ý các giới hạn ở trên (WebKit Tab trên Windows, AC-30 và AC-31 xác nhận cuối cùng trên CI).
+
+## Vòng bổ sung (AC-14 sửa phạm vi, AC-45 đến AC-48)
+
+- Test mới nằm ở `Acceptance/WalkingSkeleton/FooterAndMainFocusBrowserTests.cs`. Test AC-14 cũ không phải sửa (đã chỉ kiểm liên kết, nút, đúng 3 phần tử).
+- Lần chạy đầu của vòng này có 3 test AC-46 đỏ (Chromium, Firefox, WebKit, 1280 px) với thông báo `dieu kien thu: noi dung phai cao hon khung nhin`: lỗi của test, khung nhìn 300 px cao hơn nội dung trang Giới thiệu ở 1280 px. Đã hạ khung nhìn xuống 150 px; không đổi assert của AC. Ngoài ra không có test nào đỏ (343 test khác đạt).
+- Lỗi timeout chập chờn Developer báo: trong lần chạy cuối (346 test) không có test trình duyệt nào timeout, nên chưa có tên test để ghi. `dotnet format --verify-no-changes` sạch.
+- `dotnet test` (Debug) không chạy được vì app của người dùng đang khóa `SimpleBlog.Web.exe` (lỗi MSB3021/MSB3027); đã dùng Release theo `CLAUDE.md`. Test lệnh xanh ở Release; output ở mục trên là của lần chạy cuối.

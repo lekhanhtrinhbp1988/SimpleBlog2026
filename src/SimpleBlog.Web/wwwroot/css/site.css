@@ -11,6 +11,10 @@ body {
   line-height: var(--line-height-body);
   color: var(--color-text);
   background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 h1,
@@ -134,6 +138,10 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
+.site-main:focus {
+  outline: none;
+}
+
 .site-main p {
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
@@ -145,6 +153,7 @@ a:hover {
   padding-block: var(--space-6);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
+  margin-top: auto;
 }
 
 .site-footer p {

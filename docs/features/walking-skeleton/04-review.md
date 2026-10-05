@@ -6,7 +6,8 @@
 - File xóa: `Views/Home/Privacy.cshtml`, `_Layout.cshtml.css`, `_ValidationScriptsPartial.cshtml`, `wwwroot/js/site.js`, toàn bộ `wwwroot/lib/`.
 - File mới (untracked), đã đọc: `Services/SecurityHeaders.cs`, `wwwroot/css/tokens.css`, `.stylelintrc.json`, `package.json`, `scripts/check-stylelint-rules.sh`, `tests/stylelint/violations.css`, `ProgramTests.cs`, `SecurityHeadersTests.cs`, `DesignTokenContrastTests.cs`.
 - Lệnh thứ ba (`--ignored`) chỉ trả về `bin/`, `obj/`: không có đường dẫn bị `.gitignore` che.
-- Đã chạy: `dotnet format --verify-no-changes` sạch; `dotnet build -c Release` 0 warning, 0 lỗi; `dotnet test -c Release --filter "Category!=Browser"` 40/40 đạt.
+- Vòng bổ sung (T-12, T-13): `git diff HEAD` chỉ đổi `site.css` (bốn khai báo ở `body`, `margin-top: auto` ở footer, khối `.site-main:focus`) và đổi `[ ]` thành `[x]` ở T-12, T-13 trong `03-tasks.md`. Không có file untracked, không có đường dẫn bị `.gitignore` che. `01`, `02` không bị sửa. Đúng `Files:` của T-12, T-13.
+- Đã chạy: `dotnet build -c Release` 0 lỗi; `dotnet test -c Release --filter "Category!=Browser"` 63/63 đạt. Chưa chạy Stylelint (máy review không có node_modules) và chưa đo trình duyệt (việc của tester).
 
 ## Đối chiếu thiết kế
 
@@ -33,7 +34,7 @@
 | AC-11 | Đạt | Skip-link là phần tử đầu của `body` |
 | AC-12 | Đạt | `transform` đẩy lên trên khung nhìn khi không focus |
 | AC-13 | Đạt | `main#main tabindex="-1"` |
-| AC-14 | Đạt | `:focus-visible` outline 2 px; không `outline: none`; header không cố định |
+| AC-14 | Đạt | `:focus-visible` outline 2 px cho liên kết và nút; header không cố định; `main` ngoài phạm vi theo AC-48 |
 | AC-15 | Đạt | `min-height: var(--space-12)` cho title và mục menu |
 | AC-16 | Cần tester | `lang`, landmark, một `h1`, tương phản theo token |
 | AC-17 | Đạt | Menu là liên kết thường, không script |
@@ -64,12 +65,16 @@
 | AC-42 | Đạt | CSP không có `unsafe-inline`/`unsafe-eval` |
 | AC-43 | Đạt (cần tester) | Không script inline, không `style=""` |
 | AC-44 | Đạt | Tên blog viết thẳng, không qua `@` |
+| AC-45 | Đạt (cần tester đo) | `body` flex cột, `min-height: 100vh` rồi `100dvh`; `.site-footer { margin-top: auto }` |
+| AC-46 | Đạt | Không `fixed`/`sticky`; footer nằm sau `main` trong luồng |
+| AC-47 | Đạt | `main` là flex item, không chồng; lề dưới `main` giữ nguyên |
+| AC-48 | Đạt (cần tester) | `.site-main:focus { outline: none }`, đúng một `outline: none` trong `site.css`; `tabindex="-1"` giữ nguyên ở `_Layout.cshtml:31` |
 
 ## Tuân thủ tài liệu nền
 
 | Tài liệu | Đạt | Ghi chú |
 |---|---|---|
-| `ui-guidelines.md` (tokens, layout, thành phần) | Đạt | CSS chỉ dùng `var(--...)`; 720 px, lề 16/32, breakpoint 768, header không cố định, focus 2 px |
+| `ui-guidelines.md` (tokens, layout, thành phần) | Đạt | CSS chỉ dùng `var(--...)`; thêm `100vh`/`100dvh`, `auto`, `none` là giá trị từ khóa, không phải màu/font/khoảng cách tự đặt. `outline: none` chỉ trên `main` không bấm được, đúng 02; `ui-guidelines.md` chưa có quy định này (đã ghi ở 02, không coi là tiền lệ) |
 | `nfr.md` (tiếp cận, hiệu năng, SEO, bảo mật) | Đạt | `lang`, `title`, `description`, skip-link, focus, ba header bảo mật. Hiệu năng, `canonical`, Open Graph nằm ngoài phạm vi theo 01 |
 | `architecture.md` và ADR | Đạt | Theo ADR-0013 (bỏ Bootstrap/jQuery), ADR-0015 (Playwright, Stylelint). `Services/` có trong bảng tầng. Không có quyết định lớn mới thiếu ADR |
 
