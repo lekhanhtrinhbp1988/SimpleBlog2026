@@ -1,28 +1,20 @@
 using System.Net;
-using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace SimpleBlog.Tests.Acceptance.About;
 
-// Program (top-level statements) la internal nen khong dung duoc WebApplicationFactory<Program>
-// truc tiep tu assembly test; tao factory bang reflection tren cung kieu Program do.
 public sealed class WebFactoryHolder : IDisposable
 {
-    private readonly IDisposable _factory;
+    private readonly WebApplicationFactory<Program> _factory;
     public WebFactoryHolder()
     {
-        var programType = typeof(SimpleBlog.Web.Controllers.HomeController).Assembly.GetType("Program")
-            ?? throw new InvalidOperationException("Khong tim thay kieu Program");
-        var factoryType = typeof(WebApplicationFactory<>).MakeGenericType(programType);
-        _factory = (IDisposable)Activator.CreateInstance(factoryType)!;
-        var create = factoryType.GetMethods().First(m => m.Name == "CreateClient" && m.GetParameters().Length == 1);
-        var options = new WebApplicationFactoryClientOptions
+        _factory = new WebApplicationFactory<Program>();
+        Client = _factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             BaseAddress = new Uri("https://localhost"),
             AllowAutoRedirect = false
-        };
-        Client = (HttpClient)create.Invoke(_factory, new object[] { options })!;
+        });
     }
     public HttpClient Client { get; }
     public void Dispose() { Client.Dispose(); _factory.Dispose(); }

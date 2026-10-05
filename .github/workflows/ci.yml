@@ -28,7 +28,10 @@ jobs:
 
       - run: dotnet build --no-restore --configuration Release
 
-      - run: dotnet test --no-build --configuration Release
+      - name: Install Playwright browsers
+        run: pwsh tests/SimpleBlog.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium firefox webkit
+
+      - run: dotnet test --no-build --configuration Release --filter "Category!=Stylelint"
 
   # ADR-0007: feature documents need the approved project foundation.
   foundation-gate:
@@ -43,3 +46,28 @@ jobs:
           # Empty on push to main, so the gate passes there.
           BASE_REF: ${{ github.base_ref && format('origin/{0}', github.base_ref) || '' }}
         run: bash scripts/check-foundation.sh
+
+  # ADR-0015: CSS of the site must follow the design token rules.
+  stylelint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - run: npm install --no-audit --no-fund
+
+      - name: Lint site CSS
+        run: npx stylelint "src/SimpleBlog.Web/wwwroot/css/**/*.css"
+
+      - name: Check the rules still catch violations
+        run: bash scripts/check-stylelint-rules.sh
+
+      - name: Stylelint acceptance tests
+        run: dotnet test --configuration Release --filter Category=Stylelint

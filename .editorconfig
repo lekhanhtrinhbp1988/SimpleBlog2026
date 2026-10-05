@@ -24,11 +24,3 @@ trim_trailing_whitespace = false
 # (AC1_...), unit tests follow Method_Scenario. See docs/adr/0006-code-quality-gates.md.
 [tests/**.cs]
 dotnet_diagnostic.CA1707.severity = none
-
-# Third-party libraries are vendored as-is
-[src/SimpleBlog.Web/wwwroot/lib/**]
-charset = unset
-indent_style = unset
-indent_size = unset
-insert_final_newline = unset
-trim_trailing_whitespace = unset

@@ -72,6 +72,7 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | HSTS | HTTP Strict Transport Security | Header bảo trình duyệt từ nay chỉ vào site bằng HTTPS, không bao giờ bằng HTTP | `docs/project/nfr.md` |
 | Hook | Hook (Claude Code) | Script Claude Code tự chạy ở thời điểm cố định, như trước khi dùng tool (`PreToolUse`), và chặn được hành động; khai báo trong settings, skill hoặc phần đầu file subagent | Chưa có; docs/process-roadmap.md mục 1.2 |
 | Job / Step / Runner | Job / Step / Runner | Runner là máy chạy; job là một nhóm việc chạy trên một runner; step là từng lệnh trong job | `.github/workflows/ci.yml` |
+| Kestrel | Kestrel | Web server có sẵn trong ASP.NET Core; acceptance test bật nó thật để trình duyệt Playwright mở được trang qua địa chỉ HTTP | `tests/SimpleBlog.Tests/Acceptance/WalkingSkeleton/` |
 | Last Responsible Moment | Thời điểm muộn nhất có trách nhiệm | Nguyên tắc hoãn quyết định tới lúc muộn nhất mà chưa gây tốn kém, để quyết khi có nhiều thông tin hơn | ADR-0007, mục Câu hỏi mở |
 | Lessons learned | Bài học rút ra | Ghi lại điều lần sau nên làm khác, theo chủ đề và mã ổn định (`AGT-NN`, `SEC-NN`…) | [docs/lessons-learned.md](lessons-learned.md) |
 | Lighthouse / Lighthouse CI | Lighthouse | Công cụ của Google chấm điểm trang web (tốc độ, tiếp cận, SEO) từ 0 đến 100; bản CI chạy trên mỗi PR và làm đỏ PR khi dưới mức | `docs/project/nfr.md`, [ADR-0015](adr/0015-ui-test-tooling.md) |
@@ -91,6 +92,7 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | Nghị định 13 | Nghị định 13/2023/NĐ-CP | Quy định của Việt Nam về bảo vệ dữ liệu cá nhân: phải xin đồng ý, cho rút lại, nêu rõ dữ liệu đi đâu | `docs/project/vision.md`, `nfr.md` |
 | NFR | Non-functional requirements (yêu cầu phi chức năng) | Hệ thống phải tốt đến mức nào: nhanh, an toàn, dễ tiếp cận…; mỗi dòng có mức đo được và cách kiểm | `docs/project/nfr.md` |
 | Npgsql | Npgsql | Thư viện .NET để kết nối PostgreSQL, kể cả provider cho EF Core (`UseNpgsql`) | [ADR-0008](adr/0008-post-storage-database.md) |
+| npm | Node Package Manager | Trình quản lý gói của Node.js; ở đây chỉ dùng trên CI để cài Stylelint (`package.json`), app và máy dev không cần Node | `package.json`, [ADR-0015](adr/0015-ui-test-tooling.md) |
 | OAuth | OAuth 2.0 | Chuẩn cho phép đăng nhập bằng tài khoản ở dịch vụ khác (ở đây là GitHub) mà blog không giữ mật khẩu | [ADR-0010](adr/0010-authentication.md) |
 | OIDC | OpenID Connect | Chuẩn đăng nhập xây trên OAuth; GitHub Actions dùng nó để deploy lên Azure mà không lưu mật khẩu trong repo | [ADR-0009](adr/0009-hosting.md) |
 | Open Graph | Open Graph | Các thẻ `og:` trong trang quy định tiêu đề, mô tả, ảnh hiện ra khi chia sẻ link lên mạng xã hội | `docs/project/nfr.md` |

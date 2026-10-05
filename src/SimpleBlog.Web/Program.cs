@@ -1,3 +1,5 @@
+using SimpleBlog.Web.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +15,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.Use(async (context, next) =>
+{
+    SecurityHeaders.Apply(context.Response.Headers);
+    await next(context);
+});
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
@@ -27,3 +35,5 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+public partial class Program;
