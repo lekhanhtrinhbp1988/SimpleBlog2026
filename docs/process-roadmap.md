@@ -17,7 +17,7 @@ Xếp theo giai đoạn: làm hết giai đoạn trước rồi mới sang giai 
 | `/init-project`, agent `product` và `ux`, cổng chặn ba lớp (ADR-0007) | #15, #16 |
 | Bảng thuật ngữ | #18 |
 | Lộ trình quy trình | #19 |
-| Thiết kế dựa trên hướng dẫn của Anthropic: danh mục nguồn, skill `/design`, mục "Đối chiếu hướng dẫn" trong ADR và bản thiết kế | PR này |
+| Thiết kế dựa trên hướng dẫn của Anthropic: danh mục nguồn, skill `/design`, mục "Đối chiếu hướng dẫn" trong ADR và bản thiết kế | #20 |
 
 ## Giai đoạn 1: vá lỗ hổng của workflow hiện tại
 
