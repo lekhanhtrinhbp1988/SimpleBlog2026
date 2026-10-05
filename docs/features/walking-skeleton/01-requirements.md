@@ -11,6 +11,8 @@ Hiện app vẫn gần với khung mẫu `dotnet new mvc`: giao diện Bootstrap
 
 Các câu hỏi mở của bản nháp trước (CH-1 đến CH-6) đã được người dùng trả lời ngày 2026-10-05. Câu trả lời ghi ở mục "Giả định", phần "Quyết định của người dùng", và đã đưa vào các AC.
 
+Bổ sung 2026-10-05, sau khi người dùng mở app xem bằng mắt (PR #23 đang mở): thêm hai quy định về vị trí footer và vòng focus của vùng nội dung chính (AC-45 đến AC-48), và làm rõ phạm vi của AC-14. Các AC khác giữ nguyên. `ui-guidelines.md` chưa có hai quy định này (xem "Quyết định của người dùng", mục 7 và 8).
+
 ## Phạm vi
 
 ### Trong phạm vi
@@ -18,7 +20,9 @@ Các câu hỏi mở của bản nháp trước (CH-1 đến CH-6) đã được
 - Layout chung cho mọi trang công khai, theo mục Layout và Thành phần của `ui-guidelines.md`:
   - một cột rộng tối đa 720 px, căn giữa;
   - header gồm tên blog "Trình's Dev Notes" và menu chính, với liên kết "Bỏ qua tới nội dung chính";
-  - footer gồm dòng bản quyền "© <năm hiện tại> Lê Khánh Trình".
+  - footer gồm dòng bản quyền "© <năm hiện tại> Lê Khánh Trình";
+  - khi nội dung trang ngắn hơn khung nhìn, footer nằm sát đáy khung nhìn; khi nội dung dài hơn, footer nằm ngay sau nội dung và cuộn theo trang (bổ sung 2026-10-05).
+- Vùng nội dung chính không hiện vòng focus khi nhận focus từ liên kết "Bỏ qua tới nội dung chính"; mọi liên kết và nút vẫn có vòng focus (bổ sung 2026-10-05).
 - Menu chính chỉ có mục "Giới thiệu", vì đây là trang duy nhất đã có. `ui-guidelines.md` quy định mục nào có thì hiện khi feature tương ứng xong.
 - CSS nền:
   - file token chứa đúng bảng token của `ui-guidelines.md`;
@@ -46,6 +50,8 @@ Các câu hỏi mở của bản nháp trước (CH-1 đến CH-6) đã được
 - Sửa agent `ux`. Đây là việc chuẩn bị riêng, làm sau F-00.
 - Sửa `vision.md`, `ui-guidelines.md`, `docs/glossary.md` theo ADR-0008, 0012, 0013. Đây là việc chuẩn bị riêng của PR tài liệu nền.
 - Đổi tên project, solution, repo hay namespace `SimpleBlog`. Tên "Trình's Dev Notes" chỉ là tên hiển thị cho độc giả.
+- Bổ sung vào `ui-guidelines.md` hai quy định mới của AC-45 đến AC-48 (footer sát đáy khi nội dung ngắn; vùng nội dung chính không vẽ vòng focus). Đề xuất làm bằng PR riêng sửa tài liệu nền, cập nhật `approved_on`.
+- Footer dính cố định ở đáy khung nhìn khi cuộn. Người dùng đã chọn không làm (AC-46).
 
 ## Acceptance criteria
 
@@ -144,8 +150,14 @@ Trong các AC dưới đây:
 ### AC-14: Focus luôn nhìn thấy
 
 - Given mở một trong các trang hiện có
-- When bấm Tab lần lượt qua mọi phần tử bấm được
+- When bấm Tab lần lượt qua mọi phần tử bấm được (liên kết và nút; vùng nội dung chính không phải phần tử bấm được, xem AC-48)
 - Then mỗi phần tử khi có focus đều có viền focus dày ít nhất 2 px, và phần tử đó nằm trong khung nhìn
+
+### AC-48: Vùng nội dung chính không vẽ vòng focus
+
+- Given vừa dùng liên kết "Bỏ qua tới nội dung chính", focus đang ở vùng nội dung chính
+- When xem vùng nội dung chính
+- Then không có vòng focus hay viền nào bao quanh vùng nội dung chính
 
 ### AC-15: Vùng bấm đủ lớn
 
@@ -289,6 +301,24 @@ Trong các AC dưới đây:
 - When xem footer
 - Then footer có dòng "© <năm hiện tại> Lê Khánh Trình", chữ 14 px màu `--color-text-muted`
 
+### AC-45: Footer sát đáy khung nhìn khi nội dung ngắn
+
+- Given mở trang chủ ở khung nhìn 360 × 800 px hoặc 1280 × 800 px, trên một trong ba trình duyệt
+- When trang tải xong, chưa cuộn
+- Then cạnh dưới của footer trùng cạnh dưới khung nhìn (lệch không quá 1 px)
+
+### AC-46: Footer không dính khi nội dung dài
+
+- Given mở một trang có nội dung cao hơn khung nhìn (ví dụ trang Giới thiệu với khung nhìn đủ thấp)
+- When trang tải xong, chưa cuộn
+- Then footer không nằm trong khung nhìn
+
+### AC-47: Footer không chồng lên nội dung chính
+
+- Given mở một trong các trang hiện có ở độ rộng 360 px và 1280 px, với khung nhìn cao hơn nội dung và với khung nhìn thấp hơn nội dung
+- When đo vị trí vùng nội dung chính và footer
+- Then cạnh trên của footer nằm ở dưới hoặc trùng cạnh dưới của vùng nội dung chính
+
 ### SEO
 
 ### AC-37: Ngôn ngữ trang là tiếng Việt
@@ -354,6 +384,13 @@ Người dùng trả lời 2026-10-05 các câu hỏi mở CH-1 đến CH-6 củ
 5. CH-5, SEO: F-00 làm `lang`, `<title>`, `meta description` (AC-37 đến AC-39); `canonical` và Open Graph sang F-02.
 6. CH-6, header bảo mật: làm trong F-00 (AC-40 đến AC-43).
 
+Người dùng góp ý 2026-10-05, sau khi mở app xem bằng mắt (PR #23 đang mở):
+
+7. Footer: trên trang chủ (nội dung chỉ hai dòng), footer nằm lửng giữa màn hình, phía dưới trống. Người dùng chọn: khi nội dung ngắn hơn khung nhìn thì footer nằm sát đáy khung nhìn (AC-45); khi nội dung dài thì footer nằm sau nội dung như bình thường, không dính cố định khi cuộn (AC-46), và không chồng lên nội dung (AC-47). Mục Footer của `ui-guidelines.md` chưa quy định điều này.
+8. Vòng focus của vùng nội dung chính: sau khi dùng liên kết "Bỏ qua tới nội dung chính", vùng nội dung chính hiện vòng focus 2 px bao cả nội dung, trông như lỗi. Người dùng chọn: không vẽ vòng focus trên vùng nội dung chính khi nó nhận focus (AC-48); mọi liên kết và nút vẫn giữ vòng focus (AC-14, đã sửa để nói rõ vùng nội dung chính không thuộc "phần tử bấm được"). AC-13 giữ nguyên: focus vẫn phải chuyển tới vùng nội dung chính. Quyết định này không trái `ui-guidelines.md`: luật "cấm `outline: none`" ở mục Thành phần áp dụng cho phần tử bấm được (liên kết, nút, ô nhập, thẻ), và vùng nội dung chính không nằm trong thứ tự Tab. Nhưng `ui-guidelines.md` cũng chưa nói rõ trường hợp này.
+
+Hai quy định ở mục 7 và 8 chưa có trong `ui-guidelines.md`. Đề xuất bổ sung vào `ui-guidelines.md` bằng PR riêng (xem Ngoài phạm vi), để các feature sau theo cùng quy định.
+
 ### Suy đoán cấp feature
 
 Người duyệt muốn đổi thì sửa trước khi duyệt.
@@ -366,7 +403,11 @@ Người duyệt muốn đổi thì sửa trước khi duyệt.
 6. Chữ giao diện tiếng Việt viết thẳng trong view cho tới F-02 (xem Ngoài phạm vi).
 7. Dấu nháy trong tên blog là dấu nháy thẳng `'` (U+0027), đúng như người dùng gõ. Nếu muốn dấu nháy cong `’` (U+2019) thì sửa trước khi duyệt; AC-4, AC-38, AC-44 đổi theo.
 8. Tên blog có dấu nháy đơn và chữ có dấu, nên khi in qua `@` trong Razor sẽ bị mã hóa thành entity (`&#x27;`, `&#x1EC7;`...). Vì vậy các AC so chữ trên nội dung đã giải mã (xem đầu mục Acceptance criteria), không so chuỗi trong HTML thô. Theo `CLAUDE.md`, chữ cố định nên viết thẳng trong `.cshtml`; cách đặt tên blog vào `<title>` là việc của architect, miễn đạt AC-38 và AC-44. Test nào so HTML thô (ví dụ test hiện có của `about` trong AC-32) cần lưu ý điều này nếu có so tên blog.
+9. Khung nhìn 360 × 800 px và 1280 × 800 px ở AC-45 là hai cỡ thường gặp của điện thoại và máy tính; ở cả hai, trang chủ hiện tại ngắn hơn khung nhìn. Độ lệch 1 px cho phép làm tròn số lẻ của trình duyệt.
+10. "Khung nhìn đủ thấp" ở AC-46 và AC-47 do tester chọn, miễn nội dung trang cao hơn khung nhìn.
+11. "Không có vòng focus" ở AC-48 nghĩa là trên vùng nội dung chính không nhìn thấy viền hay vòng nào do focus gây ra, ở cả ba trình duyệt.
+12. AC mới được đặt trong nhóm theo chủ đề (AC-45 đến AC-47 ở nhóm Footer, AC-48 ở nhóm Bàn phím và tiếp cận), nên thứ tự mã trong file không liên tục; mã AC cũ không đổi.
 
 ## Câu hỏi mở
 
-Không có. Các câu CH-1 đến CH-6 đã được trả lời ngày 2026-10-05 (xem "Quyết định của người dùng" ở mục Giả định).
+Không có. Các câu CH-1 đến CH-6 và hai góp ý bổ sung đã được trả lời ngày 2026-10-05 (xem "Quyết định của người dùng" ở mục Giả định).
