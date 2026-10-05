@@ -94,3 +94,9 @@ Mã `AGT-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** người dùng hỏi agent có dùng `/subtask` và `/tasks` chưa. Agent trả lời "không biết lệnh `/subtask`", dựa trên trí nhớ. Người dùng tự tìm thấy nó trong Claude Code Docs. Cũng trong ngày, agent chỉ giới thiệu AI-native SDLC playbook của Anthropic khi người dùng hỏi thẳng, dù nó sát với dự án nhất.
 - **Bài học:** công cụ AI ra tính năng mới liên tục; trí nhớ của agent luôn có độ trễ. "Không thấy trong trí nhớ" khác với "không tồn tại".
 - **Áp dụng:** câu hỏi về tính năng Claude Code thì tra code.claude.com (hoặc dùng agent `claude-code-guide`); thiết kế agent hay quy trình thì đọc hướng dẫn của Anthropic trước, dẫn nguồn, nêu rõ chỗ đề xuất khác hướng dẫn. Không tìm thấy thì nói "không thấy trong tài liệu", không nói "không tồn tại". Lộ trình quy trình nằm trong `docs/process-roadmap.md`, có link tới các hướng dẫn đó.
+
+### AGT-17. Đối chiếu hướng dẫn ngay cả với đề xuất cũ của chính mình
+
+- **Chuyện gì xảy ra:** AGT-12 đề xuất import `README.md` và `CONTRIBUTING.md` vào `CLAUDE.md` để có một nguồn duy nhất. Khi tra hướng dẫn chính thức lúc làm skill `/design`, thấy khuyến nghị "Keep CLAUDE.md under 200 lines" và "chỉ đưa vào những gì áp dụng rộng". Đo lại: `CLAUDE.md` cộng hai file import là 254 dòng.
+- **Bài học:** một đề xuất hợp lý về một mặt (không chép lại nội dung) có thể đi ngược khuyến nghị ở mặt khác (độ dài context luôn nạp). Chỉ nhìn thấy khi đối chiếu với nguồn chính thức, không phải khi tự suy luận.
+- **Áp dụng:** skill `/design` bắt buộc mục "Đối chiếu hướng dẫn" có nguồn mở trực tiếp. Việc đưa `CLAUDE.md` về dưới 200 dòng là mục 1.8 của `docs/process-roadmap.md`. Mọi thứ thêm vào `CLAUDE.md` từ nay phải ngắn và trỏ sang skill hay tài liệu.

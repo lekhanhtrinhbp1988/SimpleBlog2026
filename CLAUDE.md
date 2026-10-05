@@ -42,6 +42,10 @@ Razor HTML-encodes non-ASCII characters printed through `@` (for example `ệ` b
 
 GitHub fills `.github/pull_request_template.md` only for PRs created in the web UI; `gh pr create --body-file` skips it. So whenever you write a PR description, use every section of that template in order (Tóm tắt, Vì sao, Phương án đã cân nhắc, Kiểm tra, Cần lưu ý, Definition of Done) and copy **all** Definition of Done checkboxes, marking each one or writing why it does not apply. Never drop a checkbox (AGT-15).
 
+## Design work
+
+Any design question about agents, skills, hooks, CLAUDE.md, CI or the development process goes through the `/design` skill: official Anthropic guidance read live, sources cited, deviations stated (source list: `docs/references/anthropic-guidance.md`). Questions about what Claude Code can do go to the `claude-code-guide` agent or code.claude.com before answering; "not found in the docs" is not "does not exist" (AGT-16).
+
 ## Terms
 
 `docs/glossary.md` defines the acronyms, tools and process terms used here. When talking to the user, give the full form and a plain one-line meaning the first time a term appears in a conversation, even if it is in the glossary. When a change introduces a term the glossary lacks, add it in the same PR (PRC-06).

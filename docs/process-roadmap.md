@@ -16,6 +16,8 @@ Xếp theo giai đoạn: làm hết giai đoạn trước rồi mới sang giai 
 | Lessons learned theo chủ đề, gắn vào Definition of Done | #4, #9, #17 |
 | `/init-project`, agent `product` và `ux`, cổng chặn ba lớp (ADR-0007) | #15, #16 |
 | Bảng thuật ngữ | #18 |
+| Lộ trình quy trình | #19 |
+| Thiết kế dựa trên hướng dẫn của Anthropic: danh mục nguồn, skill `/design`, mục "Đối chiếu hướng dẫn" trong ADR và bản thiết kế | #20 |
 
 ## Giai đoạn 1: vá lỗ hổng của workflow hiện tại
 
@@ -28,6 +30,7 @@ Xếp theo giai đoạn: làm hết giai đoạn trước rồi mới sang giai 
 | 1.5 | Lượt review cho test của tester | Test của tester chưa ai xem (AGT-04) | |
 | 1.6 | Bước retro cuối `/feature` và `/init-project` | Bài học chỉ được ghi khi ai đó nhớ (AGT-11) | |
 | 1.7 | `/sync` tự kiểm tham số, gợi ý tên nhánh gần đúng | Đã hai lần gõ nhầm tên nhánh (AGT-14) | |
+| 1.8 | Đưa `CLAUDE.md`, tính cả file được import, về dưới 200 dòng: cân nhắc thôi import `README.md`, chuyển phần chỉ dùng thỉnh thoảng của `CONTRIBUTING.md` sang skill hoặc rules theo đường dẫn | Hiện khoảng 260 dòng; hướng dẫn của Anthropic khuyến nghị dưới 200, file dài làm Claude bỏ sót luật (AGT-17) | Làm cùng hoặc ngay sau 1.2 |
 
 ### 1.2 Hooks cho agent
 
