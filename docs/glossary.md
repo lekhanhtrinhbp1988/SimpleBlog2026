@@ -17,6 +17,7 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | AC | Acceptance criteria (tiêu chí nghiệm thu) | Một hành vi kiểm chứng được mà feature phải đạt, đánh mã `AC-1`, `AC-2`… và mỗi AC có ít nhất một test | `docs/features/<feature>/01-requirements.md`, test tên `AC1_…` |
 | ADR | Architecture Decision Record (biên bản quyết định kiến trúc) | File ghi một quyết định kỹ thuật lớn: bối cảnh, lựa chọn, phương án bị loại, hệ quả; đã chốt thì không sửa | [docs/adr/](adr/README.md) |
 | Agent | Agent (Claude Code) | Một vai do Claude đóng với hướng dẫn, đầu vào và quyền riêng, ví dụ `ba`, `architect`, `developer` | `.claude/agents/*.md` |
+| AI-native SDLC playbook | AI-native SDLC playbook | Hướng dẫn của Anthropic chia quy trình phần mềm có AI thành sáu giai đoạn (Plan, Design, Build, Test, Deploy, Maintain), mỗi giai đoạn để lại một file trong git | [docs/process-roadmap.md](process-roadmap.md) |
 | Analyzer | .NET code analyzer | Bộ luật kiểm code lúc build (đặt tên, lỗi tiềm ẩn, hiệu năng); ở repo này mọi cảnh báo của nó làm build thất bại | `Directory.Build.props`, [ADR-0006](adr/0006-code-quality-gates.md) |
 | Artifact (pipeline) | Artifact | Các file mỗi bước của `/feature` để lại: `01-requirements` đến `05-test-report` | `docs/features/<feature>/` |
 | Artifact (claude.ai) | Artifact | Trang web Claude tạo và đăng trên claude.ai, mở bằng link, riêng tư mặc định | Không nằm trong repo |
@@ -33,6 +34,7 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | CI | Continuous Integration | Tự động build, kiểm format và chạy test trên mỗi PR và mỗi push lên `main` | `.github/workflows/ci.yml` |
 | CodeQL | CodeQL | Công cụ của GitHub quét code tìm lỗ hổng bảo mật và lỗi chất lượng; kết quả ở tab Security → Code scanning | `.github/workflows/codeql.yml` |
 | CODEOWNERS | CODEOWNERS | File chỉ định ai bắt buộc phải duyệt PR đụng tới vùng nào; dự định thêm khi có người thứ hai | Chưa có |
+| Context engineering | Context engineering | Chọn đưa vào context của model đúng những gì cần, đúng lúc; lý do agent của pipeline bắt đầu "trắng" và đọc file | Mục "Đọc" trong `.claude/agents/*.md` |
 | Conventional Commits | Conventional Commits | Quy ước message commit `loại(phạm vi): mô tả`, ví dụ `feat(about): …`, `fix: …`, `chore: …` | CONTRIBUTING.md |
 | Cổng chặn | Gate | Điểm kiểm tra tự động không cho đi tiếp khi chưa đủ điều kiện; ở đây là chặn feature khi chưa có tài liệu nền | `/feature` bước 0, job `foundation-gate`, [ADR-0007](adr/0007-project-foundation-gate.md) |
 | CRLF / LF | Carriage Return Line Feed / Line Feed | Hai cách đánh dấu xuống dòng: Windows dùng CRLF, Linux dùng LF; repo lưu LF, Git tự đổi khi checkout | `.gitattributes`, ADR-0005 |
@@ -47,12 +49,16 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | Dependency | Thư viện phụ thuộc | Thư viện hay công cụ của bên thứ ba mà dự án dùng (xunit, EF Core, Bootstrap, các GitHub Actions) | `*.csproj`, `wwwroot/lib/`, workflow |
 | Design tokens | Design tokens | Giá trị thiết kế có tên theo vai trò (màu chữ, cỡ chữ, khoảng cách), dùng thống nhất và thành biến CSS | `docs/project/ui-guidelines.md` |
 | EF Core migration | Entity Framework Core migration | File mô tả một bước thay đổi cấu trúc database, sinh từ model C# và áp lần lượt | `src/SimpleBlog.Web/Migrations/` (chưa có) |
+| Eval | Evaluation | Bộ bài kiểm tra cố định chạy lại khi sửa cấu hình agent, để biết thay đổi có làm agent tệ đi không; chưa có | docs/process-roadmap.md, giai đoạn 2 |
+| Evaluator-optimizer | Evaluator-optimizer | Mẫu thiết kế agent: một bước làm, một bước chấm và gửi lại để sửa; vòng reviewer/tester trả FAIL cho developer là mẫu này | `.claude/skills/feature/SKILL.md` |
 | Feature | Tính năng | Một thay đổi người dùng blog thấy được, đi qua pipeline `/feature` | `docs/features/<feature>/` |
 | foundation-gate | Foundation gate | Job CI làm đỏ PR đụng `docs/features/**` khi năm tài liệu nền chưa cùng `approved` | `scripts/check-foundation.sh` |
 | Force push | Force push | Push ghi đè lịch sử trên GitHub; bị cấm với `main` và với agent | Bảo vệ nhánh, `.claude/settings.json` |
+| Forked subagent | Forked subagent (`/subtask`) | Subagent chạy nền thừa hưởng toàn bộ cuộc trò chuyện hiện tại, tạo bằng lệnh `/subtask <việc>`; xem tiến độ bằng `/tasks` | Không dùng trong pipeline (xem Context engineering) |
 | GitHub Actions | GitHub Actions | Dịch vụ chạy tự động của GitHub; mỗi workflow là một file YAML gồm các job, mỗi job gồm các step | `.github/workflows/` |
 | GITHUB_TOKEN | GITHUB_TOKEN | Token tạm GitHub cấp cho mỗi lần chạy workflow; repo giới hạn nó ở quyền đọc | `permissions:` trong `ci.yml`, SEC-04 |
 | Greenfield | Greenfield project | Dự án làm mới từ đầu, chưa có code hay quyết định cũ ràng buộc | ADR-0007 |
+| Hook | Hook (Claude Code) | Script Claude Code tự chạy ở thời điểm cố định, như trước khi dùng tool (`PreToolUse`), và chặn được hành động; khai báo trong settings, skill hoặc phần đầu file subagent | Chưa có; docs/process-roadmap.md mục 1.2 |
 | Job / Step / Runner | Job / Step / Runner | Runner là máy chạy; job là một nhóm việc chạy trên một runner; step là từng lệnh trong job | `.github/workflows/ci.yml` |
 | Last Responsible Moment | Thời điểm muộn nhất có trách nhiệm | Nguyên tắc hoãn quyết định tới lúc muộn nhất mà chưa gây tốn kém, để quyết khi có nhiều thông tin hơn | ADR-0007, mục Câu hỏi mở |
 | Lessons learned | Bài học rút ra | Ghi lại điều lần sau nên làm khác, theo chủ đề và mã ổn định (`AGT-NN`, `SEC-NN`…) | [docs/lessons-learned.md](lessons-learned.md) |
@@ -65,11 +71,14 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | Major / Minor / Patch | Phiên bản lớn / nhỏ / bản vá | Ba phần của số phiên bản SemVer; xem SemVer | `.github/dependabot.yml` |
 | Merge | Gộp | Đưa thay đổi của một nhánh vào nhánh khác; repo chỉ cho squash merge vào `main` | ADR-0002 |
 | NFR | Non-functional requirements (yêu cầu phi chức năng) | Hệ thống phải tốt đến mức nào: nhanh, an toàn, dễ tiếp cận…; mỗi dòng có mức đo được và cách kiểm | `docs/project/nfr.md` |
+| Orchestrator-workers | Orchestrator-workers | Mẫu thiết kế agent: một agent chính tự chia việc con tùy đầu vào và giao cho các agent khác; `/feature` không phải mẫu này vì các bước cố định | Building Effective AI Agents |
 | OWASP Top 10 | Open Worldwide Application Security Project Top 10 | Danh sách 10 nhóm lỗ hổng web phổ biến nhất, dùng làm chuẩn khi review bảo mật | `reviewer.md`, SECURITY.md |
 | Persona | Chân dung người dùng | Mô tả cụ thể một kiểu độc giả (tuổi, nhu cầu, thiết bị, hoàn cảnh đọc) để suy ra quyết định thiết kế | `docs/project/vision.md` |
 | Pipeline | Pipeline | Chuỗi bước chạy lần lượt; ở đây là `ba → architect → developer → reviewer → tester` của `/feature` | `.claude/skills/feature/` |
+| Plan mode | Plan mode | Chế độ Claude Code chỉ đọc code và lập kế hoạch, chưa sửa gì, chờ người duyệt kế hoạch | Claude Code |
 | PR | Pull request | Đề nghị gộp một nhánh vào `main`; nơi CI chạy, người đọc, và lưu lý do của thay đổi | `.github/pull_request_template.md` |
 | Private vulnerability reporting | Báo lỗ hổng riêng tư | Cách người ngoài báo lỗ hổng bảo mật qua tab Security mà không công khai | SECURITY.md |
+| Prompt chaining | Prompt chaining | Mẫu thiết kế agent: các bước cố định nối tiếp, đầu ra bước trước là đầu vào bước sau, có thể có cổng chặn ở giữa; `/feature` là mẫu này | `.claude/skills/feature/SKILL.md` |
 | Prompt injection | Prompt injection | Nội dung độc hại (trong issue, comment, trang web) lừa agent AI làm việc khác với yêu cầu | Lộ trình quản trị AI, chưa triển khai |
 | Push protection | Push protection | GitHub chặn ngay lúc push nếu phát hiện secret dạng đã biết | SECURITY.md |
 | Rebase | Rebase | Đặt lại các commit của nhánh lên trên commit mới nhất của nhánh khác; Dependabot nhận lệnh `@dependabot rebase` | PR của Dependabot |
