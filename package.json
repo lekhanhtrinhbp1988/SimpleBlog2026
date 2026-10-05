@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "devDependencies": {
+    "stylelint": "17.16.0"
+  }
+}

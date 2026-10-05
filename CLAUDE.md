@@ -11,9 +11,9 @@ The rest of this file is only what agents need on top of those two.
 
 ## Current state
 
-The app is still close to the `dotnet new mvc` skeleton. The only feature is the About page (`HomeController.About()`, `Views/Home/About.cshtml`, a "Giới thiệu" menu item), with unit tests in `tests/SimpleBlog.Tests/Unit/` and acceptance tests in `tests/SimpleBlog.Tests/Acceptance/About/`. There is no DbContext, entity, migration or service layer yet, so there are no established patterns beyond stock ASP.NET Core MVC.
+The app has a one-column layout built on design tokens (`wwwroot/css/tokens.css`, `site.css`), with no Bootstrap, jQuery or JavaScript. Pages: home ("Bài viết", no posts yet) and About (`HomeController.Index()`/`About()`, a single "Giới thiệu" menu item); the Privacy page is gone. Unit tests are in `tests/SimpleBlog.Tests/Unit/` and acceptance tests in `tests/SimpleBlog.Tests/Acceptance/`. There is no DbContext, entity, migration or service layer beyond `Services/SecurityHeaders.cs`, so there are no established data patterns beyond stock ASP.NET Core MVC.
 
-Known workaround: `Program` is internal, so the acceptance tests build `WebApplicationFactory` through reflection. Do not copy that pattern; the fix is `public partial class Program {}` in the Web project.
+`Program` is public (`public partial class Program;`), so tests use `WebApplicationFactory<Program>` directly.
 
 Project-level decisions (vision, non-functional requirements, UI guidelines, architecture, backlog) belong in `docs/project/` and are produced by `/init-project` (ADR-0007). Until those five files exist with `status: approved`, there are no such decisions: when a task needs one, ask instead of assuming. Never write `status: approved` yourself outside the approval step of `/init-project`.
 
