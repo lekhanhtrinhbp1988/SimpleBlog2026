@@ -35,3 +35,9 @@ Mã `PRC-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** agent dùng ADR, Dependabot, CodeQL, SemVer suốt nhiều ngày mà không giải thích. Người dùng phải tự tra Google "ADR là gì", và không hiểu vì sao `dependabot[bot]` mở PR #10–#12, rồi #12 tự đóng và #14 xuất hiện.
 - **Bài học:** người làm lâu trong nghề, hay agent, quên rằng thuật ngữ quen với mình là rào cản với người khác. Hiểu sai một từ dẫn tới duyệt sai một quyết định. Người mới vào nhóm sẽ gặp đúng những chỗ khó này.
 - **Áp dụng:** `docs/glossary.md` định nghĩa mọi từ viết tắt và thuật ngữ quy trình, kèm chỗ dùng trong repo. Definition of Done và mẫu PR có mục "thuật ngữ mới đã có trong glossary". `CLAUDE.md` yêu cầu agent nói tên đầy đủ và nghĩa một dòng ngay lần đầu một thuật ngữ xuất hiện trong cuộc trao đổi, kể cả khi nó đã có trong glossary.
+
+### PRC-07. Tên lệnh và tính năng của công cụ cũng là thuật ngữ phải giải thích
+
+- **Chuyện gì xảy ra:** sau khi PRC-06 và luật "giải thích thuật ngữ lần đầu" đã có trong `CLAUDE.md`, agent vẫn hai lần khuyên "bật `/output-style` → Explanatory" mà không nói output style là gì. Người dùng gõ nhầm `/output-style => câu hỏi` và phải hỏi lại.
+- **Bài học:** agent coi tên lệnh như `/output-style`, `/tasks`, `/subtask` là chuyện hiển nhiên, nên không áp luật giải thích cho chúng, dù với người mới chúng lạ như ADR.
+- **Áp dụng:** luật giải thích lần đầu áp cho cả tên lệnh, tính năng và cài đặt của công cụ: nói nó làm gì, gõ thế nào, lưu ở đâu. "Output style" đã vào glossary và vào vùng 7 của Sổ học.

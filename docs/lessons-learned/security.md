@@ -28,3 +28,9 @@ Mã `SEC-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** khi bật CodeQL ở PR #6, agent kiểm cảnh báo của riêng PR đó (0 cảnh báo) rồi báo "không có vấn đề". Thực ra lần quét đầu tiên trên `main` đã tìm ra `actions/missing-workflow-permissions` ở `ci.yml` (cảnh báo #4), và cảnh báo này nằm im tới PR #16 mới được phát hiện, khi CodeQL comment vào dòng mới thêm.
 - **Bài học:** cảnh báo trên PR chỉ gồm những gì PR đó thêm vào. Khi bật một công cụ quét mới, lần quét đầu trên nhánh chính mới cho thấy toàn bộ hiện trạng.
 - **Áp dụng:** sau khi bật hay đổi cấu hình công cụ quét, xem **Security → Code scanning** (hoặc `gh api repos/<owner>/<repo>/code-scanning/alerts`) cho nhánh `main`, không chỉ check trên PR. Mọi workflow khai báo `permissions` tối thiểu ở đầu file (`contents: read`), chỉ nới cho job thật sự cần ghi.
+
+### SEC-05. Quyền "Yes, don't ask again" tích dần trong `settings.local.json`; phải rà định kỳ
+
+- **Chuyện gì xảy ra:** khi kiểm output style, thấy `.claude/settings.local.json` chứa `Bash(git push *)` và nhiều luật cho phép khác, do Claude Code tự thêm mỗi lần người dùng bấm "Yes, don't ask again". Luật này rộng hơn hẳn thiết kế trong `.claude/settings.json` (chỉ push `feature/*`, `chore/*`).
+- **Bài học:** quyền của agent không chỉ nằm ở file được review qua PR. File local không vào git, không ai review, và lớn dần theo từng lần bấm cho nhanh. Luật chặn (`deny`) vẫn thắng và bảo vệ nhánh trên GitHub vẫn chặn `main`, nên đây là lý do để giữ các lớp đó, không chỉ dựa vào allow-list.
+- **Áp dụng:** khi được hỏi duyệt, chọn duyệt một lần trừ khi chắc chắn muốn cho phép lâu dài. Rà `.claude/settings.local.json` định kỳ (ví dụ mỗi tháng hoặc trước khi chạy agent không người trông) và xóa luật rộng hơn thiết kế. Mục 1.2 (hooks) của lộ trình là lớp chặn không phụ thuộc vào file này.
