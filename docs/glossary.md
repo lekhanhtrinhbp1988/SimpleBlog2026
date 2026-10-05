@@ -73,6 +73,7 @@ Xếp theo bảng chữ cái của thuật ngữ. Tra nhanh bằng `Ctrl+F`.
 | NFR | Non-functional requirements (yêu cầu phi chức năng) | Hệ thống phải tốt đến mức nào: nhanh, an toàn, dễ tiếp cận…; mỗi dòng có mức đo được và cách kiểm | `docs/project/nfr.md` |
 | Orchestrator-workers | Orchestrator-workers | Mẫu thiết kế agent: một agent chính tự chia việc con tùy đầu vào và giao cho các agent khác; `/feature` không phải mẫu này vì các bước cố định | Building Effective AI Agents |
 | OWASP Top 10 | Open Worldwide Application Security Project Top 10 | Danh sách 10 nhóm lỗ hổng web phổ biến nhất, dùng làm chuẩn khi review bảo mật | `reviewer.md`, SECURITY.md |
+| Output style | Output style (kiểu trả lời) | Bộ chỉ dẫn quy định giọng, độ dài, cách trình bày của mọi câu trả lời trong phiên; có sẵn default, Proactive, Concise, Explanatory, Learning; không áp cho subagent | `/output-style <tên>`; lưu ở `outputStyle` trong `.claude/settings.local.json` |
 | Persona | Chân dung người dùng | Mô tả cụ thể một kiểu độc giả (tuổi, nhu cầu, thiết bị, hoàn cảnh đọc) để suy ra quyết định thiết kế | `docs/project/vision.md` |
 | Pipeline | Pipeline | Chuỗi bước chạy lần lượt; ở đây là `ba → architect → developer → reviewer → tester` của `/feature` | `.claude/skills/feature/` |
 | Plan mode | Plan mode | Chế độ Claude Code chỉ đọc code và lập kế hoạch, chưa sửa gì, chờ người duyệt kế hoạch | Claude Code |
