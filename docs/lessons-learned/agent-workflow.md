@@ -88,3 +88,9 @@ Mã `AGT-NN`. Cách viết và luật: xem [mục lục](../lessons-learned.md).
 - **Chuyện gì xảy ra:** mẫu PR có checkbox "có bài học mới thì đã thêm vào lessons learned", và `CLAUDE.md` yêu cầu agent tự thêm bài học. Vậy mà PR #15 và #16 vẫn thiếu bài học, người dùng phải hỏi lần thứ hai. Nguyên nhân: agent tạo PR bằng `gh pr create --body-file` với mô tả tự viết; GitHub chỉ điền mẫu khi tạo PR trên giao diện web, nên checkbox đó không bao giờ xuất hiện để nhắc.
 - **Bài học:** một luật được nhắc ở nhiều chỗ vẫn bị bỏ qua nếu chỗ thật sự dùng (lúc viết mô tả PR) không chứa nó. Phải đặt điểm kiểm ngay tại bước thực hiện.
 - **Áp dụng:** `CLAUDE.md`, bước 9 của `/feature` và bước cuối của `/init-project` yêu cầu mô tả PR đi theo đúng các mục của `.github/pull_request_template.md`, đánh dấu từng checkbox của Definition of Done (hoặc ghi rõ vì sao không áp dụng).
+
+### AGT-16. Tra tài liệu chính thức trước khi kết luận về một tính năng của công cụ
+
+- **Chuyện gì xảy ra:** người dùng hỏi agent có dùng `/subtask` và `/tasks` chưa. Agent trả lời "không biết lệnh `/subtask`", dựa trên trí nhớ. Người dùng tự tìm thấy nó trong Claude Code Docs. Cũng trong ngày, agent chỉ giới thiệu AI-native SDLC playbook của Anthropic khi người dùng hỏi thẳng, dù nó sát với dự án nhất.
+- **Bài học:** công cụ AI ra tính năng mới liên tục; trí nhớ của agent luôn có độ trễ. "Không thấy trong trí nhớ" khác với "không tồn tại".
+- **Áp dụng:** câu hỏi về tính năng Claude Code thì tra code.claude.com (hoặc dùng agent `claude-code-guide`); thiết kế agent hay quy trình thì đọc hướng dẫn của Anthropic trước, dẫn nguồn, nêu rõ chỗ đề xuất khác hướng dẫn. Không tìm thấy thì nói "không thấy trong tài liệu", không nói "không tồn tại". Lộ trình quy trình nằm trong `docs/process-roadmap.md`, có link tới các hướng dẫn đó.

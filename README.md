@@ -42,6 +42,7 @@ docs/project/              Tài liệu nền đã duyệt: vision, nfr, ui-guide
 docs/design/               Thiết kế chi tiết của các thay đổi lớn về quy trình hoặc hệ thống
 docs/features/<feature>/   01-requirements → 05-test-report của từng feature
 docs/adr/                  Architecture Decision Records: vì sao hệ thống được làm như vậy
+docs/process-roadmap.md    Lộ trình cải tiến quy trình (agent, hook, CI), theo giai đoạn
 docs/glossary.md           Thuật ngữ và từ viết tắt dùng trong dự án
 docs/lessons-learned/      Bài học rút ra khi làm dự án, mỗi file một chủ đề (mục lục: docs/lessons-learned.md)
 .claude/                   Agent, skill và quyền của Claude Code
@@ -63,5 +64,6 @@ docs/lessons-learned/      Bài học rút ra khi làm dự án, mỗi file mộ
 | Quy trình đóng góp: branch, commit, PR, Definition of Done | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Vì sao một quyết định kỹ thuật được chọn | [docs/adr/](docs/adr/) |
 | Secret để ở đâu, báo lỗ hổng thế nào | [SECURITY.md](SECURITY.md) |
+| Quy trình sẽ được cải tiến gì tiếp theo | [docs/process-roadmap.md](docs/process-roadmap.md) |
 | Bài học đã rút ra | [docs/lessons-learned.md](docs/lessons-learned.md) |
 | Hướng dẫn riêng cho agent Claude Code | [CLAUDE.md](CLAUDE.md) |
