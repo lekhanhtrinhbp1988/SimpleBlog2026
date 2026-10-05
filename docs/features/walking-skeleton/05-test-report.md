@@ -35,8 +35,8 @@ Acceptance test nằm trong `tests/SimpleBlog.Tests/Acceptance/WalkingSkeleton/`
 | AC-27 | `ProjectFileTests.AC27_MoiCapMauDuTuongPhan` | PASS |
 | AC-28 | `ProjectFileTests.AC28_CssCuaSiteQuaStylelint` (chạy Stylelint thật) | PASS |
 | AC-29 | `ProjectFileTests.AC29_StylelintChanMauVaCoChuVietCung` (chạy Stylelint thật trên file mẫu tạm và `tests/stylelint/violations.css`) | PASS |
-| AC-30 | `ProjectFileTests.AC30_CiCaiBaTrinhDuyetVaChayDotnetTestKhongLoc` (kiểm cấu hình `ci.yml`; xem Giới hạn) | PASS |
-| AC-31 | `ProjectFileTests.AC31_CiCoJobStylelintDoKhiViPham` (kiểm cấu hình `ci.yml`; xem Giới hạn) | PASS |
+| AC-30 | `ProjectFileTests.AC30_CiCaiBaTrinhDuyetVaChayDotnetTestKhongLoc` (kiểm cấu hình `ci.yml`: cài 3 trình duyệt trước `dotnet test`; build-and-test không nhắc `Browser`, nếu có `--filter` thì đúng `Category!=Stylelint`; xem Giới hạn) | PASS |
+| AC-31 | `ProjectFileTests.AC31_CiCoJobStylelintDoKhiViPham` (kiểm cấu hình `ci.yml`: job `stylelint` chạy `npx stylelint` và `dotnet test --filter Category=Stylelint`; xem Giới hạn) | PASS |
 | AC-32 | `AboutAcceptanceTests.AC1_...` đến `AC6_...` (6 test của feature `about`, không sửa phần assert) | PASS |
 | AC-33 | `HttpTests.AC33_TrangChu_TieuDeVaCauGiaiThich` | PASS |
 | AC-34 | `HttpTests.AC34_TrangPrivacyCuaKhungMau_Tra404` (`/Home/Privacy`, `/Privacy`) | PASS |
@@ -60,7 +60,7 @@ Acceptance test nằm trong `tests/SimpleBlog.Tests/Acceptance/WalkingSkeleton/`
 ## Giới hạn của bằng chứng
 
 - **WebKit và phím Tab (AC-11, AC-13, AC-14, AC-48 bản phím).** Playwright WebKit trên Windows và macOS không Tab tới liên kết, chỉ tới điều khiển form (giống Safari mặc định). Đã kiểm bằng trang thử chỉ có `<a>`, `<button>`, `<input>`: Tab bỏ qua `<a>`, `Alt+Tab` cũng vậy. Vì vậy trên máy Windows này các test bàn phím chỉ chạy Chromium và Firefox; WebKit chỉ chạy khi hệ điều hành không phải Windows/macOS (CI Ubuntu). Kết quả WebKit cho ba AC này chưa có bằng chứng cho tới khi CI chạy. Đây là hạn chế của công cụ, không phải lỗi của ứng dụng.
-- **AC-30 và AC-31** chỉ kiểm được bằng cách đọc `.github/workflows/ci.yml` (bước cài ba trình duyệt trước `dotnet test`, không `--filter`, không `continue-on-error`, job `stylelint` chạy `npx stylelint`). Việc CI thực sự đỏ khi test đỏ chỉ chứng minh được khi chạy trên GitHub; PR đầu tiên sẽ xác nhận. Stylelint đã được chạy thật ở AC-28, AC-29.
+- **AC-30 và AC-31** chỉ kiểm được bằng cách đọc `.github/workflows/ci.yml` (bước cài ba trình duyệt trước `dotnet test`, chỉ `--filter "Category!=Stylelint"` ở build-and-test và `--filter Category=Stylelint` ở job stylelint, không `continue-on-error`, job `stylelint` chạy `npx stylelint`). Việc CI thực sự đỏ khi test đỏ chỉ chứng minh được khi chạy trên GitHub; PR đầu tiên sẽ xác nhận. Stylelint đã được chạy thật ở AC-28, AC-29.
 - **AC-16** chạy axe-core trên Chromium với `BypassCSP` (axe cần tiêm script, theo 02). AC-43 không bypass.
 - Test trình duyệt cần cài trình duyệt Playwright. Máy này cài bằng `.playwright/node/.../node.exe package/cli.js install chromium firefox webkit` vì không có `pwsh`.
 - Trong lần chạy đầu có 11 test đỏ, đều do lỗi trong chính test (assert nhầm vào `href` ở AC-6, khung nhìn AC-10 quá cao để cuộn khỏi header, vòng Tab AC-14 không nhận ra focus quay vòng ở Firefox, hạn chế WebKit ở trên). Đã sửa test; không sửa `src/` và không nới assert của AC.
@@ -95,3 +95,23 @@ Không.
 - Lần chạy đầu của vòng này có 3 test AC-46 đỏ (Chromium, Firefox, WebKit, 1280 px) với thông báo `dieu kien thu: noi dung phai cao hon khung nhin`: lỗi của test, khung nhìn 300 px cao hơn nội dung trang Giới thiệu ở 1280 px. Đã hạ khung nhìn xuống 150 px; không đổi assert của AC. Ngoài ra không có test nào đỏ (343 test khác đạt).
 - Lỗi timeout chập chờn Developer báo: trong lần chạy cuối (346 test) không có test trình duyệt nào timeout, nên chưa có tên test để ghi. `dotnet format --verify-no-changes` sạch.
 - `dotnet test` (Debug) không chạy được vì app của người dùng đang khóa `SimpleBlog.Web.exe` (lỗi MSB3021/MSB3027); đã dùng Release theo `CLAUDE.md`. Test lệnh xanh ở Release; output ở mục trên là của lần chạy cuối.
+
+## Vòng sửa CI (T-14: tách test Stylelint sang job stylelint)
+
+- `AC28`, `AC29` có trait `Category=Stylelint`. `ci.yml`: build-and-test chạy `--filter "Category!=Stylelint"`, job stylelint chạy `--filter Category=Stylelint`.
+- Test `AC30_...` đỏ vì `Assert.DoesNotContain("--filter", ...)` mâu thuẫn thiết kế mới (02 mục CI). Lỗi nằm ở test, không phải `src/`. Đã cập nhật: bước test của build-and-test không được nhắc `Browser`, nếu có `--filter` thì phải đúng `Category!=Stylelint` (test trình duyệt vẫn chạy); vẫn cấm `continue-on-error`.
+- `AC31_...` thêm kiểm: job `stylelint` có `dotnet test` với `--filter Category=Stylelint`.
+- Lệnh: `dotnet test -c Release` (Debug bị khóa bởi app của người dùng). Output lần chạy này:
+
+```
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  SimpleBlog.Web -> D:\Projects\SimpleBlog2026\src\SimpleBlog.Web\bin\Release\net10.0\SimpleBlog.Web.dll
+  SimpleBlog.Tests -> D:\Projects\SimpleBlog2026\tests\SimpleBlog.Tests\bin\Release\net10.0\SimpleBlog.Tests.dll
+Test run for D:\Projects\SimpleBlog2026\tests\SimpleBlog.Tests\bin\Release\net10.0\SimpleBlog.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   346, Skipped:     0, Total:   346, Duration: 2 m 42 s - SimpleBlog.Tests.dll (net10.0)
+```
+
+Kết luận: 48/48 AC đạt, 346 test xanh (máy này chạy cả test Stylelint; CI chia hai job). `dotnet format --verify-no-changes` sạch.

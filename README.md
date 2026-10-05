@@ -56,7 +56,7 @@ docs/lessons-learned/      Bài học rút ra khi làm dự án, mỗi file mộ
 - `net10.0`, bật nullable reference types và implicit usings.
 - Solution dùng định dạng `.slnx` (mặc định của SDK 10), không phải `.sln`.
 - Test dùng xUnit v2 (`xunit` 2.9.3), có `Microsoft.AspNetCore.Mvc.Testing` để viết integration test bằng `WebApplicationFactory<Program>`.
-- Test trình duyệt dùng Playwright (`Microsoft.Playwright`) và axe-core (`Deque.AxeCore.Playwright`). CSS được kiểm bằng Stylelint (`package.json`); Node chỉ cần trên CI, tùy chọn trên máy dev.
+- Test trình duyệt dùng Playwright (`Microsoft.Playwright`) và axe-core (`Deque.AxeCore.Playwright`). CSS được kiểm bằng Stylelint (`package.json`); muốn `dotnet test` xanh toàn bộ thì máy dev cần Node và `npm install` ở gốc repo; không có Node thì chạy `dotnet test --filter "Category!=Stylelint"`.
 - Connection string `DefaultConnection` chỉ có trong `appsettings.Development.json`, trỏ tới `(localdb)\MSSQLLocalDB`, database `SimpleBlog`. `appsettings.json` không có connection string. Xem [SECURITY.md](SECURITY.md) về cách giữ secret.
 
 ## Tài liệu

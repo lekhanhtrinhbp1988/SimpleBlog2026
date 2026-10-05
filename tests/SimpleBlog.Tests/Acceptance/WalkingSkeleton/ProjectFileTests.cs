@@ -71,6 +71,7 @@ public partial class ProjectFileTests
     }
 
     [Fact]
+    [Trait("Category", "Stylelint")]
     public async Task AC28_CssCuaSiteQuaStylelint()
     {
         var (code, output) = await RunStylelintAsync("src/SimpleBlog.Web/wwwroot/css/**/*.css");
@@ -78,6 +79,7 @@ public partial class ProjectFileTests
     }
 
     [Fact]
+    [Trait("Category", "Stylelint")]
     public async Task AC29_StylelintChanMauVaCoChuVietCung()
     {
         // A throw-away sample, independent of tests/stylelint/violations.css, outside wwwroot/css/tokens.css.
@@ -118,7 +120,15 @@ public partial class ProjectFileTests
         }
 
         var testLine = ci.Substring(test, ci.IndexOf('\n', test) - test);
-        Assert.DoesNotContain("--filter", testLine);
+        // Browser tests must still run; the only allowed exclusion is Category=Stylelint (it runs in the stylelint job).
+        Assert.DoesNotContain("Browser", testLine);
+        var filters = Regex.Matches(testLine, @"--filter\s+""?([^""\s]+)""?");
+        Assert.True(filters.Count <= 1, "dotnet test co nhieu hon mot --filter");
+        if (filters.Count == 1)
+        {
+            Assert.Equal("Category!=Stylelint", filters[0].Groups[1].Value);
+        }
+
         Assert.DoesNotContain("continue-on-error", ci);
     }
 
@@ -130,6 +140,10 @@ public partial class ProjectFileTests
         Assert.True(job >= 0, "ci.yml khong co job stylelint");
         var body = ci[job..];
         Assert.Contains("npx stylelint", body);
+        var testAt = body.IndexOf("dotnet test", StringComparison.Ordinal);
+        Assert.True(testAt >= 0, "job stylelint khong chay dotnet test");
+        var stylelintTestLine = body.Substring(testAt, body.IndexOf('\n', testAt) - testAt);
+        Assert.Matches(@"--filter\s+""?Category=Stylelint""?", stylelintTestLine);
         Assert.DoesNotContain("continue-on-error", ci);
         Assert.DoesNotContain("|| true", ci);
         Assert.Contains("branches: [main]", ci);

@@ -55,9 +55,9 @@ Khi squash merge, **tiêu đề PR trở thành commit trên `main`**, nên tiê
 1. `dotnet format --verify-no-changes`
 2. `dotnet build -c Release`
 3. cài trình duyệt Playwright (Chromium, Firefox, WebKit)
-4. `dotnet test -c Release`
+4. `dotnet test -c Release` (loại các test có trait `Category=Stylelint`)
 
-Job `stylelint` (Node, không cần .NET) chạy Stylelint trên CSS của site và `scripts/check-stylelint-rules.sh` để chứng minh luật còn chặn được vi phạm (xem [ADR-0015](docs/adr/0015-ui-test-tooling.md)).
+Job `stylelint` cài cả Node và .NET: chạy Stylelint trên CSS của site và `scripts/check-stylelint-rules.sh` để chứng minh luật còn chặn được vi phạm và hai acceptance test `Category=Stylelint` (xem [ADR-0015](docs/adr/0015-ui-test-tooling.md)). Trên máy dev cần `npm install` ở gốc repo để hai test này xanh.
 
 Cùng workflow có job `foundation-gate` (`scripts/check-foundation.sh`): PR nào thêm hoặc sửa `docs/features/**` (trừ `_template/`) sẽ đỏ nếu năm tài liệu nền trong `docs/project/` chưa cùng `status: approved` (xem [ADR-0007](docs/adr/0007-project-foundation-gate.md)). PR `chore`, `fix`, tài liệu khác không bị ảnh hưởng.
 

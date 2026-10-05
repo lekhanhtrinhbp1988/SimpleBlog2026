@@ -31,7 +31,7 @@ jobs:
       - name: Install Playwright browsers
         run: pwsh tests/SimpleBlog.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium firefox webkit
 
-      - run: dotnet test --no-build --configuration Release
+      - run: dotnet test --no-build --configuration Release --filter "Category!=Stylelint"
 
   # ADR-0007: feature documents need the approved project foundation.
   foundation-gate:
@@ -57,6 +57,10 @@ jobs:
         with:
           node-version: lts/*
 
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
       - run: npm install --no-audit --no-fund
 
       - name: Lint site CSS
@@ -64,3 +68,6 @@ jobs:
 
       - name: Check the rules still catch violations
         run: bash scripts/check-stylelint-rules.sh
+
+      - name: Stylelint acceptance tests
+        run: dotnet test --configuration Release --filter Category=Stylelint
