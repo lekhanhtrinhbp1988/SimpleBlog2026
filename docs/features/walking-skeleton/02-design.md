@@ -10,6 +10,8 @@ Thay toàn bộ phần giao diện của khung `dotnet new mvc` bằng layout m�
 - **`Program` public.** Thêm `public partial class Program;` để test dùng `WebApplicationFactory<Program>` trực tiếp.
 - **Công cụ kiểm (ADR-0015).** Thêm package `Microsoft.Playwright` và `Deque.AxeCore.Playwright` vào project test (tester không được sửa `.csproj`). Thêm `package.json` chỉ chứa Stylelint, cấu hình `.stylelintrc.json`, một file CSS vi phạm mẫu để CI chứng minh luật chặn được. CI cài trình duyệt Playwright trước `dotnet test` và có job `stylelint` riêng.
 
+- **Bổ sung 2026-10-05 (AC-45 đến AC-48, AC-14 làm rõ).** Chỉ sửa `site.css`, không đổi HTML: `body` thành cột flex cao tối thiểu bằng khung nhìn, footer có `margin-top: auto` nên bị đẩy xuống đáy khi nội dung ngắn và nằm ngay sau nội dung khi nội dung dài (không `position: fixed`/`sticky`). Vùng `main` (`tabindex="-1"`, đích của liên kết bỏ qua) không vẽ vòng focus qua một luật `.site-main:focus { outline: none }` riêng; luật `:focus-visible` chung của mọi liên kết và nút giữ nguyên.
+
 Feature không có DbContext, entity hay migration. Ràng buộc đăng ký `AddDbContext<T>((sp, options) => ...)` không áp dụng ở đây; nó áp dụng cho feature đầu tiên thêm DbContext (F-04).
 
 ## Ánh xạ AC -> thành phần
@@ -29,7 +31,8 @@ Feature không có DbContext, entity hay migration. Ràng buộc đăng ký `Add
 | AC-11 | `_Layout.cshtml`: `<a class="skip-link" href="#main">Bỏ qua tới nội dung chính</a>` là phần tử đầu tiên trong `body` |
 | AC-12 | `site.css`: `.skip-link` nằm trọn phía trên khung nhìn (`transform`) khi không có focus; `.skip-link:focus` hiện lại |
 | AC-13 | `_Layout.cshtml`: `<main id="main" tabindex="-1">` nhận focus khi theo liên kết `#main` |
-| AC-14 | `site.css`: `:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus); outline-offset: var(--focus-ring-offset) }`; header không cố định nên không che phần tử có focus |
+| AC-14 | `site.css`: `:focus-visible { outline: var(--focus-ring-width) solid var(--color-focus); outline-offset: var(--focus-ring-offset) }` áp cho mọi liên kết và nút; header không cố định nên không che phần tử có focus. `main#main` không nằm trong thứ tự Tab (`tabindex="-1"`) nên không thuộc phạm vi AC này (xem AC-48) |
+| AC-48 | `site.css`: `.site-main:focus { outline: none }` (độ ưu tiên 0,2,0, thắng `:focus-visible` 0,1,0 và vòng focus mặc định của trình duyệt); chỉ nhắm `main`, không đụng liên kết hay nút. `_Layout.cshtml` giữ `tabindex="-1"` nên AC-13 vẫn đạt |
 | AC-15 | `site.css`: `.site-nav a`, `.site-title` `display: inline-flex; min-height: var(--space-12)` (48 px); `.skip-link` có đệm `--space-2` × `--space-4` |
 | AC-16 | `_Layout.cshtml`: `lang="vi"`, landmark `header`, `nav aria-label`, `main`, `footer`, một `h1` mỗi trang; tương phản theo token (AC-27). Kiểm bằng `Deque.AxeCore.Playwright` (T-8) |
 | AC-17 | Menu là liên kết HTML thường, không cần JavaScript; trang không tải script |
@@ -52,6 +55,9 @@ Feature không có DbContext, entity hay migration. Ràng buộc đăng ký `Add
 | AC-34 | `HomeController`: bỏ action `Privacy`; xóa `Views/Home/Privacy.cshtml` |
 | AC-35 | `Program.cs`: `public partial class Program;`; unit test `ProgramTests` |
 | AC-36 | `_Layout.cshtml`: `<p class="site-footer__copy">© @DateTime.Now.Year Lê Khánh Trình</p>`; `site.css`: `.site-footer { font-size: var(--font-size-xs); color: var(--color-text-muted) }` |
+| AC-45 | `site.css`: `body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh }`, `.site-footer { margin-top: auto }`; khi tổng chiều cao header + main + footer nhỏ hơn khung nhìn, phần dư dồn vào lề trên của footer nên cạnh dưới footer trùng cạnh dưới khung nhìn |
+| AC-46 | `site.css`: `.site-footer` không có `position: fixed`/`sticky`; khi nội dung cao hơn khung nhìn, `margin-top: auto` bằng 0 và footer nằm sau `main` trong luồng bình thường |
+| AC-47 | `site.css`: header, `main`, footer là các mục flex xếp dọc trong luồng, không phần tử nào định vị tuyệt đối hay cố định (chỉ `.skip-link` là `absolute`), nên cạnh trên footer luôn ≥ cạnh dưới `main` (cộng lề dưới `--space-16` của `.site-main`) |
 | AC-37 | `_Layout.cshtml`: `<html lang="vi">` |
 | AC-38 | `_Layout.cshtml`: `<title>` ghép `ViewData["Title"]` + " - " với tên blog viết thẳng; trang chủ không đặt `Title` |
 | AC-39 | `_Layout.cshtml` in `<meta name="description">` từ `ViewData["Description"]`; `Index.cshtml`, `About.cshtml` mỗi view đặt một chuỗi riêng |
@@ -164,7 +170,7 @@ Hai file, nạp theo thứ tự `tokens.css` rồi `site.css`. Áp dụng `ui-gu
 | Selector | Khai báo |
 |---|---|
 | `*, *::before, *::after` | `box-sizing: border-box` |
-| `body` | `margin: 0; font-family: var(--font-family-base); font-size: var(--font-size-sm); line-height: var(--line-height-body); color: var(--color-text); background: var(--color-bg)` |
+| `body` | `margin: 0; font-family: var(--font-family-base); font-size: var(--font-size-sm); line-height: var(--line-height-body); color: var(--color-text); background: var(--color-bg)`; **bổ sung (AC-45):** `display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh` (dòng `100vh` là dự phòng cho trình duyệt chưa hỗ trợ `dvh`; `dvh` tránh footer bị đẩy dưới thanh địa chỉ trên điện thoại) |
 | `h1, h2, h3, h4` | `font-family: var(--font-family-heading); font-weight: var(--font-weight-bold); line-height: var(--line-height-heading); margin: 0 0 var(--space-4)` |
 | `h1` | `font-size: var(--font-size-2xl)`; ở `md`: `var(--font-size-3xl)` |
 | `h2`, `h3`, `h4` | `--font-size-2xl`, `--font-size-xl`, `--font-size-lg` |
@@ -182,11 +188,20 @@ Hai file, nạp theo thứ tự `tokens.css` rồi `site.css`. Áp dụng `ui-gu
 | `.site-title:hover, .site-title:focus-visible, .site-nav a:hover, .site-nav a:focus-visible` | `text-decoration: underline` |
 | `.site-nav a[aria-current="page"]` | `text-decoration: underline; text-decoration-color: var(--color-primary); text-decoration-thickness: calc(2 * var(--border-width)); text-underline-offset: 0.3em` |
 | `.site-main` | `margin-block: var(--space-12) var(--space-16); overflow-wrap: anywhere` |
+| `.site-main:focus` | **Mới (AC-48):** `outline: none`. Đặt ngay sau `.site-main` |
 | `.site-main p` | `font-size: var(--font-size-base); line-height: var(--line-height-body); margin: 0 0 var(--space-4)` |
-| `.site-footer` | `border-top: var(--border-width) solid var(--color-border); padding-block: var(--space-6); font-size: var(--font-size-xs); color: var(--color-text-muted)` |
+| `.site-footer` | `border-top: var(--border-width) solid var(--color-border); padding-block: var(--space-6); font-size: var(--font-size-xs); color: var(--color-text-muted)`; **bổ sung (AC-45):** `margin-top: auto` |
 | `.site-footer p` | `margin: 0` |
 
-Không dùng `position: sticky`/`fixed`, `transition`, `animation`, `!important`, `outline: none`, mã màu, tên màu, hàm màu hay `font-size` bằng `px`.
+Không dùng `position: sticky`/`fixed`, `transition`, `animation`, `!important`, mã màu, tên màu, hàm màu hay `font-size` bằng `px`. `outline: none` chỉ được xuất hiện đúng một lần, trong `.site-main:focus` (AC-48); `main` không nằm trong thứ tự Tab nên luật "cấm `outline: none`" của `ui-guidelines.md` mục Thành phần (áp cho phần tử bấm được) không bị vi phạm (01, Quyết định của người dùng 8). Không thêm `outline: none` cho bất kỳ selector nào khác, không dùng `:focus { outline: none }` chung.
+
+**Vì sao chọn flex + `margin-top: auto` cho footer (AC-45 đến AC-47).** Phương án đã cân nhắc:
+
+- `position: fixed; bottom: 0` cho footer: bị loại vì AC-46 (không dính khi cuộn) và AC-47 (sẽ chồng lên nội dung).
+- `.site-main { flex: 1 0 auto }` thay vì `margin-top: auto` ở footer: cũng đạt, nhưng kéo dài hộp `main` xuống tận footer, làm vùng nhận focus (AC-13) và kết quả đo `main` trong test thay đổi theo chiều cao khung nhìn. Không chọn.
+- CSS Grid `grid-template-rows: auto 1fr auto` trên `body`: đạt, nhưng `.skip-link` là con trực tiếp của `body` và dù `absolute` vẫn cần hiểu cách grid đối xử; flex đơn giản hơn và đủ.
+
+`main.container` trong `body` flex vẫn căn giữa vì `margin-inline: auto` hoạt động với mục flex và `width` đã đặt rõ (AC-1 không đổi). Lề `--space-12`/`--space-16` của `.site-main` không còn gộp (margin collapse) với phần tử khác trong flex, nhưng trước đây cũng không gộp vì header và footer có viền; khoảng cách nhìn thấy không đổi.
 
 ### Cặp màu kiểm tương phản (AC-27)
 
@@ -227,6 +242,8 @@ Unit test đọc `tokens.css` (tìm thư mục gốc repo bằng cách đi ngư�
 - Hook ổn định cho test: `header .container`, `main#main`, `footer .container`, `.site-title`, `nav[aria-label="Menu chính"] a`, `.skip-link`, `.site-footer__copy`.
 - axe-core tiêm script vào trang; nếu CSP chặn việc này, dùng `BypassCSP = true` cho context của test axe (AC-16) nhưng **không** cho test AC-43.
 - AC-10 cần trang dài hơn khung nhìn: dùng khung nhìn thấp (ví dụ 320 × 400) trên trang Giới thiệu thay vì thêm trang giả.
+- AC-45: so `footer.site-footer` `getBoundingClientRect().bottom` với `window.innerHeight` (lệch ≤ 1 px). AC-46, AC-47: cùng cách khung nhìn thấp như AC-10; đo `footer.site-footer` (`top` > `innerHeight` khi chưa cuộn) và so `top` của nó với `bottom` của `main#main`. Hook đo footer là phần tử `footer.site-footer`, không phải `footer .container`.
+- AC-48: theo liên kết bỏ qua (Tab rồi Enter), xác nhận `document.activeElement` là `main#main` (AC-13), rồi đọc `getComputedStyle(main).outlineStyle` là `none` (hoặc `outlineWidth` là `0px`) và `boxShadow` là `none`, trên cả ba trình duyệt.
 
 ## Thay đổi so với khung hiện có
 
@@ -246,4 +263,6 @@ Không thêm project, không thêm pattern (repository, mediator...).
 - **Thời gian CI.** Ba trình duyệt × năm độ rộng × hai trang. ADR-0015 cho phép chỉ chạy đủ ma trận trên `main` nếu CI vượt 10 phút; feature này chạy đủ trên mọi PR vì AC-30 yêu cầu ba trình duyệt trên PR. Đo lại sau PR đầu tiên.
 - **Stylelint không có lock file.** Chỉ ghim phiên bản `stylelint`, phụ thuộc bắc cầu có thể đổi giữa hai lần chạy CI. Chấp nhận vì máy dev không bắt buộc có Node để sinh `package-lock.json`; Dependabot theo dõi phiên bản trực tiếp. Xem lại nếu CI Stylelint đỏ không do CSS.
 - **Năm trong bản quyền** dùng `DateTime.Now` của server; quanh giao thừa có thể lệch múi giờ với người đọc vài giờ. Chấp nhận.
+- **`dvh` và thanh địa chỉ di động.** Trên điện thoại thật, `100vh` lớn hơn phần nhìn thấy khi thanh địa chỉ hiện, nên footer có thể nằm dưới mép màn hình vài chục px; `100dvh` sửa việc này trên trình duyệt hỗ trợ. Trong Playwright, `vh` và `dvh` bằng nhau nên AC-45 không phụ thuộc vào điểm này.
+- **`ui-guidelines.md` chưa có quy định của AC-45 đến AC-48.** Thiết kế dựa trên quyết định của người dùng trong 01. Bổ sung vào `ui-guidelines.md` là PR tài liệu nền riêng (01, Ngoài phạm vi); cho tới đó, feature sau không được coi `outline: none` trên `.site-main:focus` là tiền lệ cho phần tử bấm được.
 - **WebKit trên Windows** của Playwright có thể khác Safari thật; nfr chấp nhận Playwright WebKit làm đại diện.
