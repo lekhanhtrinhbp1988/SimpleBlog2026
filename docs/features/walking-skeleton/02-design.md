@@ -8,7 +8,7 @@ Thay toàn bộ phần giao diện của khung `dotnet new mvc` bằng layout m�
 - **Trang.** Trang chủ (`HomeController.Index`) hiện `h1` "Bài viết" và câu "Chưa có bài viết nào.". Trang Giới thiệu giữ nguyên nội dung, chỉ thêm mô tả trang. Bỏ action và view `Privacy`; `/Home/Privacy` rơi vào route mặc định không có action nên trả 404.
 - **Header bảo mật.** Lớp tĩnh `Services/SecurityHeaders.cs` đặt `Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`; `Program.cs` gọi nó qua một middleware inline đặt trước định tuyến, nên áp cho cả trang lẫn file tĩnh.
 - **`Program` public.** Thêm `public partial class Program;` để test dùng `WebApplicationFactory<Program>` trực tiếp.
-- **Công cụ kiểm (ADR-0015).** Thêm package `Microsoft.Playwright` và `Deque.AxeCore.Playwright` vào project test (tester không được sửa `.csproj`). Thêm `package.json` chỉ chứa Stylelint, cấu hình `.stylelintrc.json`, một file CSS vi phạm mẫu để CI chứng minh luật chặn được. CI cài trình duyệt Playwright trước `dotnet test` và có job `stylelint` riêng.
+- **Công cụ kiểm (ADR-0015).** Thêm package `Microsoft.Playwright` và `Deque.AxeCore.Playwright` vào project test (tester không được sửa `.csproj`). Thêm `package.json` chỉ chứa Stylelint, cấu hình `.stylelintrc.json`, một file CSS vi phạm mẫu để CI chứng minh luật chặn được. CI cài trình duyệt Playwright trước `dotnet test` và có job `stylelint` riêng. Hai acceptance test cần `node_modules/stylelint` mang trait `Category=Stylelint`, chạy trong job `stylelint` (có Node và .NET) và bị loại khỏi `dotnet test` của job `build-and-test` (quyết định của người dùng 2026-10-05, xem mục "CI").
 
 - **Bổ sung 2026-10-05 (AC-45 đến AC-48, AC-14 làm rõ).** Chỉ sửa `site.css`, không đổi HTML: `body` thành cột flex cao tối thiểu bằng khung nhìn, footer có `margin-top: auto` nên bị đẩy xuống đáy khi nội dung ngắn và nằm ngay sau nội dung khi nội dung dài (không `position: fixed`/`sticky`). Vùng `main` (`tabindex="-1"`, đích của liên kết bỏ qua) không vẽ vòng focus qua một luật `.site-main:focus { outline: none }` riêng; luật `:focus-visible` chung của mọi liên kết và nút giữ nguyên.
 
@@ -46,9 +46,9 @@ Feature không có DbContext, entity hay migration. Ràng buộc đăng ký `Add
 | AC-25 | Xóa `wwwroot/lib/`, `_ValidationScriptsPartial.cshtml`; `_Layout.cshtml` không còn thẻ `<script>` |
 | AC-26 | `wwwroot/css/tokens.css`: `:root` khai báo đúng từng token của bảng Màu (cả bảng tô sáng code), Chữ, Khoảng cách và bo góc |
 | AC-27 | Giá trị màu trong `tokens.css`; unit test `DesignTokenContrastTests` tính tỉ lệ cho các cặp ở mục "Cặp màu kiểm tương phản" |
-| AC-28 | `.stylelintrc.json` + `package.json`; `site.css`, `tokens.css` qua Stylelint |
-| AC-29 | `.stylelintrc.json`: `color-no-hex`, `declaration-property-unit-disallowed-list` (`font-size`, `font`: `px`), tắt cho `tokens.css`; mẫu vi phạm `tests/stylelint/violations.css` và `scripts/check-stylelint-rules.sh` |
-| AC-30 | `.github/workflows/ci.yml` job `build-and-test`: bước cài Chromium, Firefox, WebKit của Playwright trước `dotnet test`; `dotnet test` chạy mọi test, không lọc trait `Browser` |
+| AC-28 | `.stylelintrc.json` + `package.json`; `site.css`, `tokens.css` qua Stylelint; acceptance test có trait `Category=Stylelint`, chạy trong job `stylelint` |
+| AC-29 | `.stylelintrc.json`: `color-no-hex`, `declaration-property-unit-disallowed-list` (`font-size`, `font`: `px`), tắt cho `tokens.css`; mẫu vi phạm `tests/stylelint/violations.css` và `scripts/check-stylelint-rules.sh`; acceptance test có trait `Category=Stylelint`, chạy trong job `stylelint` |
+| AC-30 | `.github/workflows/ci.yml` job `build-and-test`: bước cài Chromium, Firefox, WebKit của Playwright trước `dotnet test`; `dotnet test` chạy mọi test trừ trait `Category=Stylelint`, không lọc trait `Browser` |
 | AC-31 | `.github/workflows/ci.yml` job `stylelint`: `npx stylelint` trên CSS của site, đỏ khi có lỗi |
 | AC-32 | `_Layout.cshtml` giữ `class="navbar-nav ..."` trên `<ul>` của menu và nhãn `Giới thiệu` viết thẳng trong `<a>`, để bộ chọn trong `AboutAcceptanceTests` vẫn khớp; `About.cshtml` giữ `h1` và đoạn văn |
 | AC-33 | `Views/Home/Index.cshtml`: `<h1>Bài viết</h1><p>Chưa có bài viết nào.</p>` |
@@ -229,8 +229,14 @@ Unit test đọc `tokens.css` (tìm thư mục gốc repo bằng cách đi ngư�
 ### CI (`.github/workflows/ci.yml`)
 
 - Job `build-and-test`: thêm bước giữa `dotnet build` và `dotnet test`:
-  `pwsh tests/SimpleBlog.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium firefox webkit` (script này do package `Microsoft.Playwright` sinh khi build; `pwsh` có sẵn trên runner Ubuntu). `dotnet test` giữ nguyên, không `--filter`, nên test trình duyệt đỏ làm job đỏ (AC-30).
+  `pwsh tests/SimpleBlog.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium firefox webkit` (script này do package `Microsoft.Playwright` sinh khi build; `pwsh` có sẵn trên runner Ubuntu). `dotnet test` không lọc trait `Browser`, nên test trình duyệt đỏ làm job đỏ (AC-30). Bản sửa 2026-10-05: lệnh thành `dotnet test --no-build --configuration Release --filter "Category!=Stylelint"` (xem đoạn "Test cần Stylelint" bên dưới).
 - Job mới `stylelint` (runner `ubuntu-latest`, cùng `permissions: contents: read` ở cấp workflow): `actions/checkout` (cùng major với job khác), `actions/setup-node` major mới nhất với `node-version: lts/*`, `npm install --no-audit --no-fund`, `npx stylelint "src/SimpleBlog.Web/wwwroot/css/**/*.css"` (AC-28, AC-31), rồi `bash scripts/check-stylelint-rules.sh` (AC-29).
+- **Test cần Stylelint (quyết định của người dùng 2026-10-05, sau khi CI PR #23 đỏ).** Hai acceptance test `ProjectFileTests.AC28_CssCuaSiteQuaStylelint` và `AC29_StylelintChanMauVaCoChuVietCung` gọi `node_modules/stylelint`, mà job `build-and-test` không có Node nên hai test đỏ ở đó. Cách làm:
+  - Hai test mang `[Trait("Category", "Stylelint")]`; không đổi assert, không skip. Trên máy dev chưa `npm install`, `dotnet test` vẫn đỏ ở hai test này với thông báo hiện có ("chua co node_modules/stylelint: chay `npm install` o goc repo").
+  - Job `build-and-test`: `dotnet test --no-build --configuration Release --filter "Category!=Stylelint"`. Test trình duyệt vẫn chạy (AC-30).
+  - Job `stylelint`: sau `actions/setup-node`, thêm `actions/setup-dotnet` (cùng major với job `build-and-test`) với `global-json-file: global.json`; sau bước `bash scripts/check-stylelint-rules.sh`, thêm bước `dotnet test --configuration Release --filter Category=Stylelint` (tự restore và build). Job không cài trình duyệt Playwright vì không chạy test `Browser`.
+  - Không bị bỏ qua lặng lẽ: nếu trait bị xóa hoặc đổi tên, hai test rơi vào `build-and-test` và đỏ ở đó vì thiếu `node_modules`; nếu job `stylelint` mất bước `dotnet test`, reviewer thấy trong diff `ci.yml`.
+  - Phương án đã loại: **cài Node và `npm install` vào job `build-and-test`**. Chạy được nhưng job vốn dài nhất (build, ba trình duyệt) phải thêm Node và npm, Node xuất hiện ở hai job thay vì một, trái tinh thần "Node chỉ ở job `stylelint`" của thiết kế ban đầu. **Skip hai test khi thiếu `node_modules`**: bị loại vì CI thiếu Node sẽ báo xanh mà không kiểm gì.
 - `.github/dependabot.yml`: thêm mục `package-ecosystem: npm`, `directory: "/"`, lịch như NuGet, `commit-message.prefix: "chore(deps)"`, nhóm minor và patch như NuGet.
 - Không thêm Lighthouse CI (backlog: trước F-05). Không cache trình duyệt Playwright trong feature này; thêm nếu thời gian CI là vấn đề.
 
@@ -248,7 +254,7 @@ Unit test đọc `tokens.css` (tìm thư mục gốc repo bằng cách đi ngư�
 ## Thay đổi so với khung hiện có
 
 - **Package test `Microsoft.Playwright`, `Deque.AxeCore.Playwright`** trong `tests/SimpleBlog.Tests`. Lý do và phương án đã cân nhắc: ADR-0015 (Accepted). Thêm trong task của developer vì tester không được sửa `.csproj`.
-- **Node chỉ trong CI: `package.json`, `.stylelintrc.json`, job `stylelint`, mục `npm` trong Dependabot.** Theo ADR-0015. App không cần Node để build hay chạy; máy dev không bắt buộc có Node.
+- **Node chỉ trong CI: `package.json`, `.stylelintrc.json`, job `stylelint`, mục `npm` trong Dependabot.** Theo ADR-0015. App không cần Node để build hay chạy; máy dev không bắt buộc có Node để chạy app, nhưng muốn `dotnet test` xanh toàn bộ thì cần `npm install` (hai test trait `Category=Stylelint`). Job `stylelint` cài thêm .NET SDK để chạy hai test đó (bản sửa 2026-10-05, mục "CI").
 - **`Services/SecurityHeaders.cs`**: thư mục `Services/` đã có trong bảng tầng của `architecture.md` ("logic không thuộc một controller"). Không phải pattern mới. Phương án đơn giản hơn đã cân nhắc: viết ba header thẳng trong lambda ở `Program.cs`; không chọn vì không unit test được giá trị CSP. Không dùng package header bảo mật bên thứ ba (ví dụ NetEscapades): ba header không đáng thêm dependency.
 - **Bỏ** Bootstrap, jQuery, jquery-validation, `site.js`, CSS cô lập của layout, trang Privacy (ADR-0013, 01).
 
