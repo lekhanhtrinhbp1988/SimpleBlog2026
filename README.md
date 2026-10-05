@@ -64,6 +64,7 @@ docs/lessons-learned/      Bài học rút ra khi làm dự án, mỗi file mộ
 | Quy trình đóng góp: branch, commit, PR, Definition of Done | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Vì sao một quyết định kỹ thuật được chọn | [docs/adr/](docs/adr/) |
 | Secret để ở đâu, báo lỗ hổng thế nào | [SECURITY.md](SECURITY.md) |
+| Hướng dẫn chính thức của Anthropic dùng khi thiết kế agent và quy trình | [docs/references/anthropic-guidance.md](docs/references/anthropic-guidance.md) |
 | Quy trình sẽ được cải tiến gì tiếp theo | [docs/process-roadmap.md](docs/process-roadmap.md) |
 | Bài học đã rút ra | [docs/lessons-learned.md](docs/lessons-learned.md) |
 | Hướng dẫn riêng cho agent Claude Code | [CLAUDE.md](CLAUDE.md) |

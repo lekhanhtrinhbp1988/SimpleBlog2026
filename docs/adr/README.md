@@ -44,7 +44,15 @@ Chọn gì, nói rõ ràng ở thể khẳng định.
 - **Phương án A**: ưu, nhược, vì sao không chọn.
 - **Phương án B**: ...
 
+## Đối chiếu hướng dẫn
+
+Nguồn đã mở (link, xem docs/references/anthropic-guidance.md), quyết định theo đúng
+điểm nào và khác điểm nào, kèm lý do. Quyết định không liên quan agent hay quy trình
+thì đối chiếu với tài liệu chính thức của công nghệ đó.
+
 ## Hệ quả
 
 Điều gì dễ hơn, điều gì khó hơn, việc phải làm tiếp, khi nào nên xem lại.
 ```
+
+ADR viết từ ngày 2026-10-05 trở đi phải có mục "Đối chiếu hướng dẫn". ADR cũ không sửa thêm mục này.
